@@ -113,7 +113,7 @@
                         android:textStyle="bold" />
 
                     <EditText
-                        android:id="@+id/txt_phone"
+                        android:id="@+id/txt_phone_login"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/phone_login"
@@ -128,7 +128,7 @@
                         android:id="@+id/txt_password"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/txt_phone"
+                        android:layout_below="@+id/txt_phone_login"
                         android:layout_margin="15dp"
                         android:text="Mot de passe"
                         android:textSize="14sp"

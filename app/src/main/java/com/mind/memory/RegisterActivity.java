@@ -1,7 +1,5 @@
-package com.mind.simplelogin;
+package com.mind.memory;
 
-import android.content.Intent;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;

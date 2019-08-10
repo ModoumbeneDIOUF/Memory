@@ -1,4 +1,4 @@
-package com.mind.simplelogin;
+package com.mind.memory;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

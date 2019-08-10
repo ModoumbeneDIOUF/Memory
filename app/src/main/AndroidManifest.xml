@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mind.simplelogin">
+    package="com.mind.memory">
 
     <application
         android:allowBackup="true"
@@ -22,7 +22,8 @@
             android:name=".RegisterActivity"
             android:theme="@style/AppTheme.FullScreen" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".NewNourritureActivity"></activity>
+        <activity android:name=".NewNourritureActivity" />
+        <activity android:name=".NourritureOffertActivity"></activity>
     </application>
 
 </manifest>

@@ -86,7 +86,7 @@
                                     android:textSize="16sp" />
 
                                 <Button
-                                    android:id="@+id/btn_inscription_main"
+                                    android:id="@+id/main_btn_newNourriture"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:background="@android:color/transparent" />
@@ -125,7 +125,7 @@
                                     android:textSize="16sp" />
 
                                 <Button
-                                    android:id="@+id/btn_addNourriture_main"
+                                    android:id="@+id/main_btn_vendreProduit"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:background="@android:color/transparent" />
@@ -179,7 +179,7 @@
                                 android:textSize="16sp" />
 
                             <Button
-                                android:id="@+id/btn_vendre_main"
+                                android:id="@+id/main_btn_nourritureDispo"
                                 android:layout_width="match_parent"
                                 android:layout_height="120dp"
                                 android:layout_marginLeft="10dp"
@@ -221,7 +221,7 @@
                                 android:textSize="16sp" />
 
                             <Button
-                                android:id="@+id/btn_autre_main"
+                                android:id="@+id/main_btn_acheterProduit"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_marginLeft="10dp"

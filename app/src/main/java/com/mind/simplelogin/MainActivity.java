@@ -15,19 +15,51 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-
-    private ImageButton btRegister;
-    private ImageView circle1;
-    TextView tvLogin;
+    private Button btnOffrire,btnVendre,btndispo,btnAcheter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        btnOffrire = findViewById(R.id.main_btn_newNourriture);
+        btnVendre = findViewById(R.id.main_btn_vendreProduit);
+        btndispo = findViewById(R.id.main_btn_nourritureDispo);
+        btnAcheter = findViewById(R.id.main_btn_acheterProduit);
 
+        //On gére les actions des buttons ici
 
+        btnOffrire.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =  new Intent(MainActivity.this,NewNourritureActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnVendre.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =  new Intent(MainActivity.this,NewNourritureActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btndispo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =  new Intent(MainActivity.this,NewNourritureActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnAcheter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =  new Intent(MainActivity.this,NewNourritureActivity.class);
+                startActivity(intent);
+            }
+        });
     }
-
 
 }

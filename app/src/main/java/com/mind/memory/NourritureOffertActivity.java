@@ -2,26 +2,41 @@ package com.mind.memory;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import com.mind.memory.Adapter.ListNourritureAdapter;
+import com.mind.memory.Adapter.AdapterListNourriture;
+import com.mind.memory.Model.DetailNourritureOffert;
 import com.mind.memory.Model.ListNourritureOffert;
 
+import java.util.ArrayList;
+
 public class NourritureOffertActivity extends AppCompatActivity {
-    private ListView recyclerView;
+    private ListView listView;
+    private ArrayList<ListNourritureOffert> models;
+    private AdapterListNourriture adapterListNourriture;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nourriture_offert);
 
-        recyclerView = findViewById(R.id.listNourritureRecycleview);
+        listView = findViewById(R.id.listNourritureOffert);
+        models = DetailNourritureOffert.getListOffert();
 
-        ListNourritureOffert listNourritureOffert =  new ListNourritureOffert("plat","riz au poisson");
+        adapterListNourriture = new AdapterListNourriture(NourritureOffertActivity.this,models);
+        listView.setAdapter(adapterListNourriture);
 
-        ListNourritureAdapter adapter = new ListNourritureAdapter(getApplicationContext(),R.layout.list_nourriture_added,listNourritureOffert);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ListNourritureOffert listNourritureOffert = models.get(position);
 
-        recyclerView.setAdapter(adapter);
+                Toast.makeText(NourritureOffertActivity.this, "Position"+listNourritureOffert.getListDesc(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

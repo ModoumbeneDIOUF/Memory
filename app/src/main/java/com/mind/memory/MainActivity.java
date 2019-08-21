@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         btndispo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent =  new Intent(MainActivity.this,NewNourritureActivity.class);
+                Intent intent =  new Intent(MainActivity.this,NourritureOffertActivity.class);
                 startActivity(intent);
             }
         });

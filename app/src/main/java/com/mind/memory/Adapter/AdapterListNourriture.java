@@ -45,12 +45,16 @@ public class AdapterListNourriture extends BaseAdapter {
 
         ImageView images = convertView.findViewById(R.id.list_nourriture_pic);
         TextView listTypeNourriture = convertView.findViewById(R.id.listTypeNourriture);
+        TextView provenance = convertView.findViewById(R.id.provenanceNourriture);
         TextView tempsRestant = convertView.findViewById(R.id.tempsRestant);
+        TextView lieu = convertView.findViewById(R.id.listAdresse);
         ListNourritureOffert listNourritureOffert = models.get(position);
 
         images.setImageResource(listNourritureOffert.getImageId());
         listTypeNourriture.setText(listNourritureOffert.getListType());
+        provenance.setText(listNourritureOffert.getListProvenance());
         tempsRestant.setText(listNourritureOffert.getListDesc());
+        lieu.setText(listNourritureOffert.getListLieu());
 
         return convertView;
     }

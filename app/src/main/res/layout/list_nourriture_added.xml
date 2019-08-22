@@ -27,7 +27,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/list_nourriture_pic"
-            android:text="product Price"
+            android:text="type nourriture"
+            android:textAlignment="center"
+            android:textSize="18dp"
+            android:textColor="@color/colorPrimaryDark"/>
+        <TextView
+            android:id="@+id/provenanceNourriture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/listTypeNourriture"
+            android:text="provenance nourriture"
+            android:textAlignment="center"
+            android:textSize="18dp"
+            android:textColor="@color/colorPrimaryDark"/>
+
+        <TextView
+            android:id="@+id/listAdresse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/provenanceNourriture"
+            android:text="Adresse"
             android:textAlignment="center"
             android:textSize="18dp"
             android:textColor="@color/colorPrimaryDark"/>
@@ -35,8 +54,8 @@
             android:id="@+id/tempsRestant"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/listTypeNourriture"
-            android:text="product Description"
+            android:layout_below="@id/listAdresse"
+            android:text="jour restant"
             android:textAlignment="center"
             android:layout_marginTop="2dp"
             android:textSize="16dp"

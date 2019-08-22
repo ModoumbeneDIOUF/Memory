@@ -35,7 +35,7 @@ public class NourritureOffertActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ListNourritureOffert listNourritureOffert = models.get(position);
 
-                Toast.makeText(NourritureOffertActivity.this, "Position"+listNourritureOffert.getListDesc(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(NourritureOffertActivity.this,listNourritureOffert.getListType(), Toast.LENGTH_SHORT).show();
             }
         });
     }

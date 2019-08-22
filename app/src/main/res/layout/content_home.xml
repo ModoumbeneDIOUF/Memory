@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.mind.memory.HomeActivity"
+    >
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/relive1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="230dp"
+                    android:background="@drawable/header"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="143dp"
+                        android:layout_height="90dp"
+                        android:layout_marginLeft="120dp"
+                        android:layout_marginTop="140dp"
+                        android:layout_marginRight="50dp"
+                        android:src="@mipmap/app_logo" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="250dp"
+                    android:layout_marginRight="10dp">
+
+                    //debut first
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="135dp"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
+
+                        <android.support.v7.widget.CardView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <ImageView
+                                    android:id="@+id/imageInscription_main"
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:layout_centerInParent="true"
+                                    android:src="@mipmap/offrir_nouriture" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@id/imageInscription_main"
+                                    android:layout_centerInParent="true"
+                                    android:layout_marginTop="0dp"
+                                    android:layout_marginBottom="10dp"
+                                    android:text="Offrir nourriture"
+                                    android:textSize="16sp" />
+
+                                <Button
+                                    android:id="@+id/main_btn_newNourriture"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@android:color/transparent" />
+                            </RelativeLayout>
+
+
+                        </android.support.v7.widget.CardView>
+
+                        <android.support.v7.widget.CardView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <ImageView
+                                    android:id="@+id/imageNourriture_main"
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:layout_centerInParent="true"
+                                    android:src="@mipmap/vendre_main" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@id/imageNourriture_main"
+                                    android:layout_centerInParent="true"
+                                    android:layout_marginTop="0dp"
+                                    android:layout_marginBottom="10dp"
+                                    android:text="Vendre un produit"
+                                    android:textSize="16sp" />
+
+                                <Button
+                                    android:id="@+id/main_btn_vendreProduit"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@android:color/transparent" />
+                            </RelativeLayout>
+
+
+                        </android.support.v7.widget.CardView>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                //debut deux
+
+                <LinearLayout
+                    android:id="@+id/layout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/layout1"
+                    android:layout_marginTop="15dp">
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:id="@+id/imageVendre_main"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_centerInParent="true"
+                                android:src="@mipmap/nouriture_dispo" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/imageVendre_main"
+                                android:layout_centerInParent="true"
+                                android:layout_marginTop="0dp"
+                                android:layout_marginBottom="10dp"
+                                android:text="Nourriture disponible"
+                                android:textSize="16sp" />
+
+                            <Button
+                                android:id="@+id/main_btn_nourritureDispo"
+                                android:layout_width="match_parent"
+                                android:layout_height="120dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="5dp"
+                                android:background="@android:color/transparent" />
+                        </RelativeLayout>
+
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:id="@+id/imageAutre_main"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_centerInParent="true"
+                                android:src="@mipmap/panier_main" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/imageAutre_main"
+                                android:layout_centerInParent="true"
+                                android:layout_marginTop="0dp"
+                                android:layout_marginBottom="10dp"
+                                android:text="Acheter un produit"
+                                android:textSize="16sp" />
+
+                            <Button
+                                android:id="@+id/main_btn_acheterProduit"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="6dp"
+                                android:background="@android:color/transparent" />
+                        </RelativeLayout>
+
+
+                    </android.support.v7.widget.CardView>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/relive1">
+
+                <ImageView
+                    android:id="@+id/circle1"
+                    android:layout_width="190dp"
+                    android:layout_height="134dp"
+                    android:transitionName="image"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="-100dp"
+                    android:layout_marginBottom="50dp"
+                    android:src="@drawable/circlet" />
+
+                <ImageView
+                    android:id="@+id/circle3"
+                    android:layout_width="134dp"
+                    android:layout_height="134dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginRight="-50dp"
+                    android:layout_marginStart="190dp"
+                    android:layout_marginBottom="-60dp"
+                    android:layout_toLeftOf="@id/circle2"
+                    android:src="@drawable/circlet"
+                    android:layout_marginLeft="190dp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</RelativeLayout>

@@ -21,9 +21,14 @@
         <activity
             android:name=".RegisterActivity"
             android:theme="@style/AppTheme.FullScreen" />
-        <activity android:name=".MainActivity" />
         <activity android:name=".NewNourritureActivity" />
-        <activity android:name=".NourritureOffertActivity"></activity>
+        <activity android:name=".NourritureOffertActivity" />
+        <activity
+            android:name=".HomeActivity"
+            android:label="@string/title_activity_home"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".ProduitVenduActivity" />
+        <activity android:name=".VendreProduitActivity"></activity>
     </application>
 
 </manifest>

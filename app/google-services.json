@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "324136265661",
+    "firebase_url": "https://memory-afd66.firebaseio.com",
+    "project_id": "memory-afd66",
+    "storage_bucket": "memory-afd66.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:324136265661:android:13edaa2030ea44ee",
+        "android_client_info": {
+          "package_name": "com.mind.simplelogin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "324136265661-i3dr763k4cqud466otk0ptlo06n2rtr0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mind.memory",
+            "certificate_hash": "53c465e31088df6e328b9b7ce8fe8d6296995e8b"
+          }
+        },
+        {
+          "client_id": "324136265661-78v7rt2utsrl8uof4unla7g9709dr9hp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJcExdzb8FsuN6wjwhfh2OF6pJ-6UI1nw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "324136265661-78v7rt2utsrl8uof4unla7g9709dr9hp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

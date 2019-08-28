@@ -1,6 +1,10 @@
 package com.mind.memory;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +25,8 @@ import   android.widget.Spinner;
 import android.widget.Toast;
 
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,7 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Animation animation;
     private Spinner spinner;
     private Button btnRegister;
-    String profilChoisit;
+    String profilChoisit,prenom,nom,adresse,profil,phone,password;
     private EditText registerFirstName,registerName,registerAdress,registerPhone,registerPassword;
     private ProgressDialog loadingBar;
     @Override
@@ -115,12 +121,12 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void CrateAccount() {
-        String prenom = registerFirstName.getText().toString();
-        String nom = registerName.getText().toString();
-        String adresse = registerAdress.getText().toString();
-        String profil = profilChoisit;
-        String phone = registerPhone.getText().toString();
-        String password = registerPassword.getText().toString();
+         prenom = registerFirstName.getText().toString();
+         nom = registerName.getText().toString();
+         adresse = registerAdress.getText().toString();
+         profil = profilChoisit;
+         phone = registerPhone.getText().toString();
+         password = registerPassword.getText().toString();
 
         if (TextUtils.isEmpty(prenom)|| TextUtils.isEmpty(nom) || TextUtils.isEmpty(adresse) || TextUtils.isEmpty(phone) ||TextUtils.isEmpty(password)){
             Toast.makeText(this, "Veillez remplire tous les champs svp!", Toast.LENGTH_SHORT).show();
@@ -132,13 +138,35 @@ public class RegisterActivity extends AppCompatActivity {
         else {
             loadingBar.setTitle("Inscription");
             loadingBar.setMessage("Veillez patienter un instant nous traitons votre demande");
+            loadingBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            loadingBar.setMax(100);
+            loadingBar.getMax();
+            loadingBar.getProgress();
+            loadingBar.incrementProgressBy(10);
+            loadingBar.setCancelable(false);
             loadingBar.setCanceledOnTouchOutside(false);
             loadingBar.show();
 
-            ValidatePhoneNumber(prenom,nom,adresse,profil,phone,password);
+            haveInternetConnection();
+            Clean();
         }
     }
 
+
+    private void haveInternetConnection() {
+        NetworkInfo network =((ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+        if (network==null || !network.isConnected())
+        {
+            loadingBar.dismiss();
+            Toast.makeText(this, "Vous n'avez pas accées à internet", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            ValidatePhoneNumber(prenom,nom,adresse,profil,phone,password);
+
+        }
+
+    }
     private void ValidatePhoneNumber(final String prenom, final String nom, final String adresse, final String profil, final String phone, final String password) {
         final DatabaseReference RootRef;
         RootRef = FirebaseDatabase.getInstance().getReference();
@@ -154,10 +182,27 @@ public class RegisterActivity extends AppCompatActivity {
                     userDataMap.put("adresse",adresse);
                     userDataMap.put("profil",profil);
                     userDataMap.put("password",password);
-                    Toast.makeText(RegisterActivity.this, "Bien", Toast.LENGTH_SHORT).show();
+
+                    RootRef.child("Users").child(phone).updateChildren(userDataMap)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                  if (task.isSuccessful()){
+                                      Toast.makeText(RegisterActivity.this, "Votre demande a été bien traité merci..", Toast.LENGTH_SHORT).show();
+                                        loadingBar.dismiss();
+                                      Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
+                                      startActivity(intent);
+                                  }
+                                  else {
+                                      Toast.makeText(RegisterActivity.this, "Erreur de connection veillez recommencer svp!!", Toast.LENGTH_SHORT).show();
+
+                                  }
+                                }
+                            });
                 }
                 else {
-                    Toast.makeText(RegisterActivity.this, "Mal", Toast.LENGTH_SHORT).show();
+                    loadingBar.dismiss();
+                    Toast.makeText(RegisterActivity.this, "Numero déja utilise veillez choisir au autre numéro", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -168,4 +213,11 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    private void Clean() {
+        registerFirstName.setText("");
+        registerName.setText("");
+        registerAdress.setText("");
+        registerPhone.setText("");
+        registerPassword.setText("");
+    }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mind.memory">
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -31,7 +32,8 @@
         <activity android:name=".ProduitVenduActivity" />
         <activity android:name=".VendreProduitActivity" />
         <activity android:name=".RecupererNourritureActivity" />
-        <activity android:name=".AcheterUnProduitActivity"></activity>
+        <activity android:name=".AcheterUnProduitActivity" />
+        <activity android:name=".RenewPasswordActivity"></activity>
     </application>
 
 </manifest>

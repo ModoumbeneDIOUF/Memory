@@ -43,8 +43,8 @@ public class RegisterActivity extends AppCompatActivity {
     private Animation animation;
     private Spinner spinner;
     private Button btnRegister;
-    String profilChoisit,prenom,nom,adresse,profil,phone,password;
-    private EditText registerFirstName,registerName,registerAdress,registerPhone,registerPassword;
+    String profilChoisit,prenom,nom,adresse,profil,phone,password,confirm;
+    private EditText registerFirstName,registerName,registerAdress,registerPhone,registerPassword,registerPasswordConfirm;
     private ProgressDialog loadingBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
         registerAdress = findViewById(R.id.register_adresse);
         registerPhone = findViewById(R.id.register_telephone);
         registerPassword = findViewById(R.id.register_password);
+        registerPasswordConfirm = findViewById(R.id.register_password_confirm);
 
         btnRegister = findViewById(R.id.register_btn);
         loadingBar =  new ProgressDialog(this);
@@ -127,9 +128,13 @@ public class RegisterActivity extends AppCompatActivity {
          profil = profilChoisit;
          phone = registerPhone.getText().toString();
          password = registerPassword.getText().toString();
+         confirm = registerPasswordConfirm.getText().toString();
 
-        if (TextUtils.isEmpty(prenom)|| TextUtils.isEmpty(nom) || TextUtils.isEmpty(adresse) || TextUtils.isEmpty(phone) ||TextUtils.isEmpty(password)){
+        if (TextUtils.isEmpty(prenom)|| TextUtils.isEmpty(nom) || TextUtils.isEmpty(adresse) || TextUtils.isEmpty(phone) ||TextUtils.isEmpty(password) ||TextUtils.isEmpty(confirm)){
             Toast.makeText(this, "Veillez remplire tous les champs svp!", Toast.LENGTH_SHORT).show();
+        }
+        else if(!(password.equals(confirm))){
+            Toast.makeText(this, "Les deux mots de passe ne pas sont pas les même", Toast.LENGTH_SHORT).show();
         }
         else if (profil.equals("vide")){
             Toast.makeText(this, "Veillez choisir un profil svp!", Toast.LENGTH_SHORT).show();

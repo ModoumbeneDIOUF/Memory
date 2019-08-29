@@ -22,9 +22,8 @@
         android:textSize="20sp"
         android:textColor="@color/colorWhite"
         android:textStyle="bold|italic"
-        android:text="username"
+        android:text="@string/app_name"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
 
 
 </LinearLayout>

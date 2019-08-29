@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -26,7 +27,9 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnLogin;
     private ImageButton btnGoToRegister;
     private EditText phoneLogin,passwordLogin;
+    private TextView forgetPassword;
     private ProgressDialog loadingBar;
+    public String sendName,sendFirstName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         btnGoToRegister = findViewById(R.id.btnRegister);
         phoneLogin = findViewById(R.id.txt_phone_login);
         passwordLogin = findViewById(R.id.password_login);
+        forgetPassword = findViewById(R.id.tvForgot);
         loadingBar =  new ProgressDialog(this);
 
 
@@ -53,6 +57,14 @@ public class LoginActivity extends AppCompatActivity {
 
                 haveInternetConnection();
 
+            }
+        });
+
+        forgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this,RenewPasswordActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -84,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
             loadingBar.setMax(100);
             loadingBar.getMax();
             loadingBar.getProgress();
-            loadingBar.incrementProgressBy(10);
+            loadingBar.incrementProgressBy(2);
             loadingBar.setCancelable(false);
             loadingBar.setCanceledOnTouchOutside(false);
             loadingBar.show();
@@ -106,6 +118,10 @@ public class LoginActivity extends AppCompatActivity {
                     if (usersData.getPassword().equals(password)){
                         loadingBar.dismiss();
                         Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+                        sendFirstName = dataSnapshot.child("Users").child(phone).child("prenom").getValue().toString();
+                        sendName = dataSnapshot.child("Users").child(phone).child("nom").getValue().toString();
+                        intent.putExtra("prenom",sendFirstName);
+                        intent.putExtra("nom",sendName);
                         startActivity(intent);
                         loadingBar.dismiss();
                         Toast.makeText(LoginActivity.this,"Bienvenue "+ dataSnapshot.child("Users").child(phone).child("prenom").getValue().toString()+" "+dataSnapshot.child("Users").child(phone).child("nom").getValue().toString(), Toast.LENGTH_LONG).show();

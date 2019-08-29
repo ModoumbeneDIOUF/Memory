@@ -14,10 +14,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private Button btnOffrire,btnVendre,btndispo,btnAcheter;
+     String prenom,nom;
+    private TextView user;
 
 
     @Override
@@ -29,6 +32,11 @@ public class HomeActivity extends AppCompatActivity
         btnVendre = findViewById(R.id.main_btn_vendreProduit);
         btndispo = findViewById(R.id.main_btn_nourritureDispo);
         btnAcheter = findViewById(R.id.main_btn_acheterProduit);
+        user = findViewById(R.id.userName_profile);
+
+        Intent donnees = getIntent();
+        nom = donnees.getStringExtra("nom");
+        prenom = donnees.getStringExtra("prenom");
 
         //On gére les actions des buttons ici
 
@@ -69,7 +77,6 @@ public class HomeActivity extends AppCompatActivity
         toolbar.setTitle("Acceuil");
         setSupportActionBar(toolbar);
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -77,6 +84,7 @@ public class HomeActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -113,6 +121,7 @@ public class HomeActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 

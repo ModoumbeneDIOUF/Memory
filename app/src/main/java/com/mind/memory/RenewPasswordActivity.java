@@ -65,8 +65,10 @@ public class RenewPasswordActivity extends AppCompatActivity {
             loadingBar.setCanceledOnTouchOutside(false);
             loadingBar.show();
             SaveNewPassword(phone,password);
+            Clean();
         }
     }
+
 
     private void SaveNewPassword(final String phone, final String password) {
         final DatabaseReference RootRef,ChildRef;
@@ -87,11 +89,16 @@ public class RenewPasswordActivity extends AppCompatActivity {
                     Toast.makeText(RenewPasswordActivity.this, "Veillez donner le bon numéro", Toast.LENGTH_SHORT).show();
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
+    }
+
+    private void Clean() {
+        forgetPassword.setText("");
+        forgetPasswordConf.setText("");
+        forgetPhone.setText("");
     }
 }

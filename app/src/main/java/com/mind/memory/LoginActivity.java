@@ -31,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog loadingBar;
     public String sendName,sendFirstName;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

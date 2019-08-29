@@ -27,7 +27,7 @@
         android:textColor="@color/colorWhite"
         android:textSize="20sp"
         android:textStyle="bold"
-       />
+        />
 
     <ImageView
         android:id="@+id/circle2"
@@ -94,7 +94,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/txt_name_register"
                         android:layout_marginLeft="15dp"
-                        android:layout_marginTop="-20dp"
+                        android:layout_marginTop="-18dp"
                         android:layout_marginRight="15dp"
                         android:drawablePadding="10dp"
                         android:inputType="text"
@@ -221,7 +221,7 @@
                         android:layout_marginRight="15dp"
                         android:drawablePadding="30dp"
                         android:inputType="textPassword"
-                        android:padding="10dp" />
+                        android:padding="5dp" />
 
 
                 </RelativeLayout>

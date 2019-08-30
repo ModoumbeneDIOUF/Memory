@@ -1,63 +1,92 @@
 package com.mind.memory;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
+import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
+import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.mind.memory.Adapter.AdapterListNourriture;
-import com.mind.memory.Model.DetailNourritureOffert;
-import com.mind.memory.Model.ListNourritureOffert;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.mind.memory.Model.NourritureOffer;
+import com.mind.memory.ViewHolder.NorritureOfertViewHolder;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class NourritureOffertActivity extends AppCompatActivity {
     private ListView listView;
-    private ArrayList<ListNourritureOffert> models;
-    private AdapterListNourriture adapterListNourriture;
     private ProgressDialog progressDialog;
+    private DatabaseReference NourritureRef;
+    Context context;
+    private RecyclerView recyclerView;
+    RecyclerView.LayoutManager layoutManager;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nourriture_offert);
+
+        recyclerView = findViewById(R.id.listNourritureOffert);
+        recyclerView.setHasFixedSize(true);
+
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
         progressDialog = new ProgressDialog(NourritureOffertActivity.this);
 
-        listView = findViewById(R.id.listNourritureOffert);
-        models = DetailNourritureOffert.getListOffert();
+        NourritureRef = FirebaseDatabase.getInstance().getReference().child("Nourriture");
 
-        adapterListNourriture = new AdapterListNourriture(NourritureOffertActivity.this,models);
-        listView.setAdapter(adapterListNourriture);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ListNourritureOffert listNourritureOffert = models.get(position);
-                progressDialog.setTitle("Chargement en cours");
-                progressDialog.setMessage("Veillez patienter un instant !!!");
-                Intent intent = new Intent(NourritureOffertActivity.this,RecupererNourritureActivity.class);
+        //listView = findViewById(R.id.listNourritureOffert);
+        //models = DetailNourritureOffert.getListOffert();
 
-                int idImage = listNourritureOffert.getImageId();
-                String nomNourriture = listNourritureOffert.getListType().toString();
-                String adresse = listNourritureOffert.getListLieu().toString();
-                String provenance = listNourritureOffert.getListProvenance().toString();
-                String jourRestant = listNourritureOffert.getListDesc().toString();
-
-                intent.putExtra("idImage",idImage);
-                intent.putExtra("nomNourriture",nomNourriture);
-                intent.putExtra("pronance",provenance);
-                intent.putExtra("adresse",adresse);
-                intent.putExtra("jourRestant",jourRestant);
-
-                startActivity(intent);
-
-                Toast.makeText(NourritureOffertActivity.this,listNourritureOffert.getListType(), Toast.LENGTH_SHORT).show();
-            }
-        });
     }
+
+    @Override
+    protected void onStart() {
+
+        super.onStart();
+        FirebaseRecyclerOptions<NourritureOffer> options =
+                new FirebaseRecyclerOptions.Builder<NourritureOffer>()
+                        .setQuery(NourritureRef,NourritureOffer.class)
+                        .build();
+
+        FirebaseRecyclerAdapter<NourritureOffer,NorritureOfertViewHolder> adapter =
+                new FirebaseRecyclerAdapter<NourritureOffer, NorritureOfertViewHolder>(options) {
+                    @Override
+                    protected void onBindViewHolder(@NonNull NorritureOfertViewHolder holder, int position, @NonNull NourritureOffer model) {
+                        holder.typeNourriture.setText(model.getDescription());
+                        holder.proveNourriture.setText(model.getProvenance());
+                        holder.adressNourriture.setText(model.getLieu());
+                        holder.contactNourriture.setText(model.getNumero());
+                        Picasso.get().load(model.getImage()).into(holder.imageViewNourriture);
+                    }
+
+                    @NonNull
+                    @Override
+                    public NorritureOfertViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+                        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_nourriture_added,parent,false);
+                        NorritureOfertViewHolder holder = new NorritureOfertViewHolder(view);
+                        return holder;
+                    }
+                };
+
+
+        adapter.startListening();
+        recyclerView.setAdapter(adapter);
+
+
+    }
+
+
 }

@@ -2,6 +2,7 @@ package com.mind.memory;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -64,12 +65,21 @@ public class NourritureOffertActivity extends AppCompatActivity {
         FirebaseRecyclerAdapter<NourritureOffer,NorritureOfertViewHolder> adapter =
                 new FirebaseRecyclerAdapter<NourritureOffer, NorritureOfertViewHolder>(options) {
                     @Override
-                    protected void onBindViewHolder(@NonNull NorritureOfertViewHolder holder, int position, @NonNull NourritureOffer model) {
+                    protected void onBindViewHolder(@NonNull NorritureOfertViewHolder holder, int position, @NonNull final NourritureOffer model) {
                         holder.typeNourriture.setText(model.getDescription());
                         holder.proveNourriture.setText(model.getProvenance());
                         holder.adressNourriture.setText(model.getLieu());
                         holder.contactNourriture.setText(model.getNumero());
                         Picasso.get().load(model.getImage()).into(holder.imageViewNourriture);
+
+                        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(NourritureOffertActivity.this,RecupererNourritureActivity.class);
+                                intent.putExtra("nourritureId",model.getNourritureId());
+                                startActivity(intent);
+                            }
+                        });
                     }
 
                     @NonNull

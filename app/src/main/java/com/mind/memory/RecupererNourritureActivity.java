@@ -1,19 +1,31 @@
 package com.mind.memory;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.mind.memory.Model.NourritureOffer;
+import com.squareup.picasso.Picasso;
+
 public class RecupererNourritureActivity extends AppCompatActivity {
     private ImageView imageRecup;
     private TextView nomRecup,adresseRecup,jourRestantRecup,provenanceRecup;
+    private String nourritureId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recuperer_nourriture);
+
+        nourritureId = getIntent().getStringExtra("nourritureId");
 
         imageRecup = findViewById(R.id.imageRecueperer);
         nomRecup = findViewById(R.id.typeRecuperer);
@@ -21,19 +33,29 @@ public class RecupererNourritureActivity extends AppCompatActivity {
         provenanceRecup = findViewById(R.id.provenaceRecuperer);
         jourRestantRecup = findViewById(R.id.tempsRestantRecuperer);
 
-        Intent intent = getIntent();
-        int idImage = intent.getIntExtra("idImage",1);
-        String nomNourriture = intent.getStringExtra("nomNourriture");
-        String provenace = intent.getStringExtra("pronance");
-        String adresse = intent.getStringExtra("adresse");
-        String jourRestant = intent.getStringExtra("jourRestant");
+       getNourritureDetails(nourritureId);
+    }
 
+    private void getNourritureDetails(String nourritureId) {
+        DatabaseReference nourriturRef = FirebaseDatabase.getInstance().getReference().child("Nourriture");
 
-        imageRecup.setImageResource(idImage);
-        nomRecup.setText(nomNourriture);
-        provenanceRecup.setText(provenace);
-        adresseRecup.setText(adresse);
-        jourRestantRecup.setText(jourRestant);
+        nourriturRef.child(nourritureId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists())
+                {
+                    NourritureOffer nourritureOffer = dataSnapshot.getValue(NourritureOffer.class);
+                    nomRecup.setText(nourritureOffer.getDescription());
+                    provenanceRecup.setText(nourritureOffer.getProvenance());
+                    adresseRecup.setText(nourritureOffer.getLieu());
+                    Picasso.get().load(nourritureOffer.getImage()).into(imageRecup);
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

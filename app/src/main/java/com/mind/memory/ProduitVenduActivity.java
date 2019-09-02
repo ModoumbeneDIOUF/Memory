@@ -1,57 +1,91 @@
 package com.mind.memory;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
+import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.mind.memory.Adapter.AdapterListAVendre;
-import com.mind.memory.Model.DetailVente;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.mind.memory.Model.ListVente;
-
-import java.util.ArrayList;
+import com.mind.memory.ViewHolder.ProduitVenduViewHolder;
+import com.squareup.picasso.Picasso;
 
 public class ProduitVenduActivity extends AppCompatActivity {
     private ListView listView;
-    private ArrayList<ListVente> models;
-    private AdapterListAVendre adapterListAVendre;
+    Context context;
+    private ProgressDialog progressDialog;
+    private DatabaseReference VenduRef;
 
+    private RecyclerView recyclerView;
+    RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_produit_vendu);
 
-        listView = findViewById(R.id.listProduitAVendre);
-        models = DetailVente.getListVente();
+        recyclerView = findViewById(R.id.listProduitVendre);
+        recyclerView.setHasFixedSize(true);
 
-        adapterListAVendre = new AdapterListAVendre(ProduitVenduActivity.this,models);
-        listView.setAdapter(adapterListAVendre);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        progressDialog = new ProgressDialog(ProduitVenduActivity.this);
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ListVente listVente = models.get(position);
+        VenduRef = FirebaseDatabase.getInstance().getReference().child("ProduitVendu");
 
-                int imageAchat = listVente.getImageVented();
-                String quantiteAchat = listVente.getQuantiteVendu().toString();
-                String prixAchat = listVente.getPrixVente().toString();
-                String expiration = listVente.getJourRestant().toString();
+    }
 
-                Intent intent = new Intent(ProduitVenduActivity.this,AcheterUnProduitActivity.class);
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseRecyclerOptions<ListVente> options = new
+                FirebaseRecyclerOptions.Builder<ListVente>()
+                .setQuery(VenduRef,ListVente.class)
+                .build();
 
-                intent.putExtra("imageAchat",imageAchat);
-                intent.putExtra("quantiteAchat",quantiteAchat);
-                intent.putExtra("prixAchat",prixAchat);
-                intent.putExtra("dateExpiration",expiration);
+        FirebaseRecyclerAdapter<ListVente,ProduitVenduViewHolder> adapter =
+                new FirebaseRecyclerAdapter<ListVente, ProduitVenduViewHolder>(options) {
+                    @Override
+                    protected void onBindViewHolder(@NonNull ProduitVenduViewHolder holder, int position, @NonNull final ListVente model) {
 
-                startActivity(intent);
-                Toast.makeText(ProduitVenduActivity.this, listVente.getPrixVente(), Toast.LENGTH_SHORT).show();
-            }
-        });
+                        holder.quantiteVendu.setText(model.getQuantiteVendu());
+                        holder.dateExpirationVendu.setText(model.getDateExpiration());
+                        holder.prixVendu.setText(model.getPrixVente());
+                        Picasso.get().load(model.getImageVented()).into(holder.imageNourritureVendu);
+
+                        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(ProduitVenduActivity.this,AcheterUnProduitActivity.class);
+                                intent.putExtra("produitVenduId",model.getProduitVenduId());
+                                startActivity(intent);
+                            }
+                        });
+                    }
+
+                    @NonNull
+                    @Override
+                    public ProduitVenduViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+                        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_produit_a_vendre,parent,false);
+                        ProduitVenduViewHolder holder = new ProduitVenduViewHolder(view);
+                        return holder;
+                    }
+                };
+
+
+        recyclerView.setAdapter(adapter);
+        adapter.startListening();
     }
 }

@@ -70,7 +70,7 @@ public class NourritureOffertActivity extends AppCompatActivity {
                         holder.proveNourriture.setText(model.getProvenance());
                         holder.adressNourriture.setText(model.getLieu());
                         holder.contactNourriture.setText(model.getNumero());
-                        Picasso.get().load(model.getImage()).into(holder.imageViewNourriture);
+                        Picasso.get().load(model.getImage()).resize(500,500 ).into(holder.imageViewNourriture);
 
                         holder.itemView.setOnClickListener(new View.OnClickListener() {
                             @Override

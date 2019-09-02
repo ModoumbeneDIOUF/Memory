@@ -1,25 +1,33 @@
 package com.mind.memory.Model;
 
-public class ListVente {
+public class    ListVente {
 
-    private int imageVented;
-    private String quantiteVendu,prixVente,jourRestant;
+    private String quantiteVendu,prixVente,dateExpiration,produitVenduId,imageVented;
 
     public ListVente() {
     }
 
-    public ListVente(int imageVented, String quantiteVendu, String prixVente, String jourRestant) {
+    public ListVente(String quantiteVendu, String prixVente, String dateExpiration,String produitVenduId,String imageVented) {
         this.imageVented = imageVented;
         this.quantiteVendu = quantiteVendu;
         this.prixVente = prixVente;
-        this.jourRestant = jourRestant;
+        this.dateExpiration = dateExpiration;
+        this.produitVenduId = produitVenduId;
     }
 
-    public int getImageVented() {
+    public String getProduitVenduId() {
+        return produitVenduId;
+    }
+
+    public void setProduitVenduId(String produitVenduId) {
+        this.produitVenduId = produitVenduId;
+    }
+
+    public String getImageVented() {
         return imageVented;
     }
 
-    public void setImageVented(int imageVented) {
+    public void setImageVented(String imageVented) {
         this.imageVented = imageVented;
     }
 
@@ -39,11 +47,11 @@ public class ListVente {
         this.prixVente = prixVente;
     }
 
-    public String getJourRestant() {
-        return jourRestant;
+    public String getDateExpiration() {
+        return dateExpiration;
     }
 
-    public void setJourRestant(String jourRestant) {
-        this.jourRestant = jourRestant;
+    public void setDateExpiration(String dateExpiration) {
+        this.dateExpiration = dateExpiration;
     }
 }

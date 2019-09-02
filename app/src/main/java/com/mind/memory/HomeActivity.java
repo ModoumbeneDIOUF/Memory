@@ -51,7 +51,7 @@ public class HomeActivity extends AppCompatActivity
         btnVendre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent =  new Intent(HomeActivity.this,NewNourritureActivity.class);
+                Intent intent =  new Intent(HomeActivity.this,VendreProduitActivity.class);
                 startActivity(intent);
             }
         });

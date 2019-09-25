@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -12,10 +14,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
@@ -100,17 +104,29 @@ public class NewNourritureActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK){
-             targetUri = data.getData();
+            targetUri = data.getData();
+             CropImage.activity(targetUri)
+                     .setGuidelines(CropImageView.Guidelines.ON)
+                     .setAspectRatio(1,1)
+                     .start(this);
 
-            Bitmap bitmap;
-            try {
-                bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUri));
-                nouritureImage.setImageBitmap(bitmap);
-            } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
+                CropImage.ActivityResult  result = CropImage.getActivityResult(data);
+                if (resultCode == RESULT_OK){
+                    targetUri = result.getUri();
+                    Bitmap bitmap;
+                    try {
+                        bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUri));
+                        nouritureImage.setImageBitmap(bitmap);
+                    } catch (FileNotFoundException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
             }
+
         }
+
 
         }
 
@@ -124,11 +140,38 @@ public class NewNourritureActivity extends AppCompatActivity {
 
         if (targetUri == null)
         {
-            Toast.makeText(this, "Vous avez oublié de mettre l'image de la nourriture", Toast.LENGTH_SHORT).show();
+            Toast toast = new Toast(getApplicationContext());
+            toast.setGravity(Gravity.CENTER,0,0);
+            TextView tv = new TextView(NewNourritureActivity.this);
+            tv.setBackgroundColor(Color.WHITE);
+            tv.setTextColor(Color.RED);
+            tv.setTextSize(15);
+
+            Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
+            tv.setTypeface(t);
+            tv.setPadding(10,10,10,10);
+            tv.setText("Veillez mettre l'image de la nourriture svp");
+            toast.setView(tv);
+            toast.setDuration(Toast.LENGTH_LONG);
+            toast.show();
+
         }
         else if(TextUtils.isEmpty(typen) || TextUtils.isEmpty(provenancen) || TextUtils.isEmpty(lieun) || TextUtils.isEmpty(contactn) || TextUtils.isEmpty(quantiten))
         {
-            Toast.makeText(this, "Tous les champs sont requis", Toast.LENGTH_SHORT).show();
+            Toast toast = new Toast(getApplicationContext());
+            toast.setGravity(Gravity.CENTER,0,0);
+            TextView tv = new TextView(NewNourritureActivity.this);
+            tv.setBackgroundColor(Color.WHITE);
+            tv.setTextColor(Color.RED);
+            tv.setTextSize(15);
+
+            Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
+            tv.setTypeface(t);
+            tv.setPadding(10,10,10,10);
+            tv.setText("Tous les champs sont");
+            toast.setView(tv);
+            toast.setDuration(Toast.LENGTH_LONG);
+            toast.show();
         }
         else
         {
@@ -165,13 +208,26 @@ public class NewNourritureActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                     String message = e.toString();
-                Toast.makeText(NewNourritureActivity.this, "Erreur "+message, Toast.LENGTH_SHORT).show();
+                Toast toast = new Toast(getApplicationContext());
+                toast.setGravity(Gravity.CENTER,0,0);
+                TextView tv = new TextView(NewNourritureActivity.this);
+                tv.setBackgroundColor(Color.WHITE);
+                tv.setTextColor(Color.RED);
+                tv.setTextSize(15);
+
+                Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
+                tv.setTypeface(t);
+                tv.setPadding(10,10,10,10);
+                tv.setText(message);
+                toast.setView(tv);
+                toast.setDuration(Toast.LENGTH_LONG);
+                toast.show();
+
                 loadingBar.dismiss();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(NewNourritureActivity.this, "Image enrigistré avec succes", Toast.LENGTH_SHORT).show();
 
                 Task<Uri> uriTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                     @Override
@@ -188,9 +244,10 @@ public class NewNourritureActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Uri> task) {
                         if (task.isSuccessful()){
                             dowloadImageUri = task.getResult().toString();
-                            Toast.makeText(NewNourritureActivity.this, "getting url success", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(NewNourritureActivity.this, "getting url success", Toast.LENGTH_SHORT).show();
 
                             saveNourritureToDatabase();
+                            clear();
                         }
                     }
                 });
@@ -217,15 +274,54 @@ public class NewNourritureActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()){
                             loadingBar.dismiss();
-                            Toast.makeText(NewNourritureActivity.this, "Nourriture offert avec success", Toast.LENGTH_SHORT).show();
+
+                            Toast toast = new Toast(getApplicationContext());
+                            toast.setGravity(Gravity.CENTER,0,0);
+                            TextView tv = new TextView(NewNourritureActivity.this);
+                            tv.setBackgroundColor(Color.WHITE);
+                            tv.setTextColor(Color.BLUE);
+                            tv.setTextSize(15);
+
+                            Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
+                            tv.setTypeface(t);
+                            tv.setPadding(10,10,10,10);
+                            tv.setText("Nourriture offert avec succes");
+                            toast.setView(tv);
+                            toast.setDuration(Toast.LENGTH_LONG);
+                            toast.show();
+                            //Toast.makeText(NewNourritureActivity.this, "Nourriture offert avec success", Toast.LENGTH_SHORT).show();
                         }
                         else {
                             loadingBar.dismiss();
-                            Toast.makeText(NewNourritureActivity.this, "Erreur de l'ajout de la nourriture", Toast.LENGTH_SHORT).show();
+
+                            Toast toast = new Toast(getApplicationContext());
+                            toast.setGravity(Gravity.CENTER,0,0);
+                            TextView tv = new TextView(NewNourritureActivity.this);
+                            tv.setBackgroundColor(Color.WHITE);
+                            tv.setTextColor(Color.RED);
+                            tv.setTextSize(15);
+
+                            Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
+                            tv.setTypeface(t);
+                            tv.setPadding(10,10,10,10);
+                            tv.setText("Une erreur est survenue veillez recomencer");
+                            toast.setView(tv);
+                            toast.setDuration(Toast.LENGTH_LONG);
+                            toast.show();
+                           // Toast.makeText(NewNourritureActivity.this, "Erreur de l'ajout de la nourriture", Toast.LENGTH_SHORT).show();
 
                         }
                     }
                 });
+    }
+
+    private void clear() {
+        type.setText("");
+        provenance.setText("");
+        quantite.setText("");
+        lieu.setText("");
+        contact.setText("");
+        nouritureImage.setImageResource(R.mipmap.cam);
     }
 
 

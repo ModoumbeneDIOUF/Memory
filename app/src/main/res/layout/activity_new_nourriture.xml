@@ -14,7 +14,7 @@
         android:scaleType="center"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:src="@drawable/choicepic"
+        android:src="@mipmap/cam"
         />
     <EditText
         android:id="@+id/typeAliment"

@@ -1,19 +1,25 @@
 package com.mind.memory;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
@@ -39,6 +45,9 @@ public class VendreProduitActivity extends AppCompatActivity {
     private ImageView vendreImage;
     private Button vendreBtn;
     private Uri imageUri;
+    private DatePickerDialog datePickerDialog;
+    int year,month,dayOfMonth;
+    Calendar calendar;
     private String produitRandomKey, dowloadImageUri;
     private StorageReference produitImageRef;
     private DatabaseReference produitRef;
@@ -72,6 +81,24 @@ public class VendreProduitActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 openGallery();
+            }
+        });
+        vendreExpiretion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calendar = Calendar.getInstance();
+                year = calendar.get(Calendar.YEAR);
+                month = calendar.get(Calendar.MONTH);
+                dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
+                datePickerDialog = new DatePickerDialog(VendreProduitActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int day) {
+                                vendreExpiretion.setText(day + "/" + month + "/" +year);
+                            }
+                        },year,month,dayOfMonth);
+                datePickerDialog.show();
             }
         });
 
@@ -109,9 +136,41 @@ public class VendreProduitActivity extends AppCompatActivity {
         expiration = vendreExpiretion.getText().toString();
 
         if (imageUri == null) {
-            Toast.makeText(this, "Vous devez mettre l'image du produit", Toast.LENGTH_SHORT).show();
+
+            Toast toast = new Toast(getApplicationContext());
+            toast.setGravity(Gravity.CENTER,0,0);
+            TextView tv = new TextView(VendreProduitActivity.this);
+            tv.setBackgroundColor(Color.WHITE);
+            tv.setTextColor(Color.RED);
+            tv.setTextSize(15);
+
+            Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
+            tv.setTypeface(t);
+            tv.setPadding(10,10,10,10);
+            tv.setText("Veillez mettre l'image de la nourriture svp");
+            toast.setView(tv);
+            toast.setDuration(Toast.LENGTH_LONG);
+            toast.show();
+
+           // Toast.makeText(this, "Vous devez mettre l'image du produit", Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(quantite) || TextUtils.isEmpty(prix) || TextUtils.isEmpty(expiration)) {
-            Toast.makeText(this, "Veillez remplirre tous les champs svp", Toast.LENGTH_SHORT).show();
+            Toast toast = new Toast(getApplicationContext());
+            toast.setGravity(Gravity.CENTER,0,0);
+            TextView tv = new TextView(VendreProduitActivity.this);
+            tv.setBackgroundColor(Color.WHITE);
+            tv.setTextColor(Color.RED);
+            tv.setTextSize(15);
+
+            Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
+            tv.setTypeface(t);
+            tv.setPadding(10,10,10,10);
+            tv.setText("Tous les champs sont");
+            toast.setView(tv);
+            toast.setDuration(Toast.LENGTH_LONG);
+            toast.show();
+
+            //Toast.makeText(this, "Veillez remplirre tous les champs svp", Toast.LENGTH_SHORT).show();
+
         } else {
             StorageProduitInfo();
         }
@@ -147,13 +206,29 @@ public class VendreProduitActivity extends AppCompatActivity {
             public void onFailure(@NonNull Exception e) {
 
                 String message = e.toString();
-                Toast.makeText(VendreProduitActivity.this, "Erreur " + message, Toast.LENGTH_SHORT).show();
+
+                Toast toast = new Toast(getApplicationContext());
+                toast.setGravity(Gravity.CENTER,0,0);
+                TextView tv = new TextView(VendreProduitActivity.this);
+                tv.setBackgroundColor(Color.WHITE);
+                tv.setTextColor(Color.RED);
+                tv.setTextSize(15);
+
+                Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
+                tv.setTypeface(t);
+                tv.setPadding(10,10,10,10);
+                tv.setText(message);
+                toast.setView(tv);
+                toast.setDuration(Toast.LENGTH_LONG);
+                toast.show();
+
+                //Toast.makeText(VendreProduitActivity.this, "Erreur " + message, Toast.LENGTH_SHORT).show();
                 loadingBar.dismiss();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(VendreProduitActivity.this, "Image enrigistré avec succes", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(VendreProduitActivity.this, "Image enrigistré avec succes", Toast.LENGTH_SHORT).show();
 
                 Task<Uri> uriTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                     @Override
@@ -170,9 +245,10 @@ public class VendreProduitActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Uri> task) {
                         if (task.isSuccessful()) {
                             dowloadImageUri = task.getResult().toString();
-                            Toast.makeText(VendreProduitActivity.this, "getting url success", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(VendreProduitActivity.this, "getting url success", Toast.LENGTH_SHORT).show();
 
                             saveProduitToDatabase();
+                            clear();
                         }
                     }
                 });
@@ -197,15 +273,53 @@ public class VendreProduitActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()){
                             loadingBar.dismiss();
-                            Toast.makeText(VendreProduitActivity.this, "Produit ajouter avec success", Toast.LENGTH_SHORT).show();
+
+                            Toast toast = new Toast(getApplicationContext());
+                            toast.setGravity(Gravity.CENTER,0,0);
+                            TextView tv = new TextView(VendreProduitActivity.this);
+                            tv.setBackgroundColor(Color.WHITE);
+                            tv.setTextColor(Color.BLUE);
+                            tv.setTextSize(15);
+
+                            Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
+                            tv.setTypeface(t);
+                            tv.setPadding(10,10,10,10);
+                            tv.setText("Produit publié avec succes");
+                            toast.setView(tv);
+                            toast.setDuration(Toast.LENGTH_LONG);
+                            toast.show();
+                            //Toast.makeText(VendreProduitActivity.this, "Produit ajouter avec success", Toast.LENGTH_SHORT).show();
                         }
                         else {
                             loadingBar.dismiss();
-                            Toast.makeText(VendreProduitActivity.this, "Erreur de l'ajout du produit", Toast.LENGTH_SHORT).show();
+
+                            Toast toast = new Toast(getApplicationContext());
+                            toast.setGravity(Gravity.CENTER,0,0);
+                            TextView tv = new TextView(VendreProduitActivity.this);
+                            tv.setBackgroundColor(Color.WHITE);
+                            tv.setTextColor(Color.RED);
+                            tv.setTextSize(15);
+
+                            Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
+                            tv.setTypeface(t);
+                            tv.setPadding(10,10,10,10);
+                            tv.setText("Une erreur est survenue veillez recomencer");
+                            toast.setView(tv);
+                            toast.setDuration(Toast.LENGTH_LONG);
+                            toast.show();
+
+                            //Toast.makeText(VendreProduitActivity.this, "Erreur de l'ajout du produit", Toast.LENGTH_SHORT).show();
 
                         }
                     }
                 });
+    }
+
+    private void clear() {
+        vendreQuantite.setText("");
+        vendreExpiretion.setText("");
+        vendrePrix.setText("");
+        vendreImage.setImageResource(R.mipmap.cam);
     }
 }
 

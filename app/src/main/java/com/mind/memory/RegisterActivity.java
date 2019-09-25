@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.renderscript.ScriptGroup;
@@ -14,6 +16,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +29,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import   android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -141,13 +145,58 @@ public class RegisterActivity extends AppCompatActivity {
          confirm = registerPasswordConfirm.getText().toString();
 
         if (TextUtils.isEmpty(prenom)|| TextUtils.isEmpty(nom) || TextUtils.isEmpty(adresse) || TextUtils.isEmpty(phone) ||TextUtils.isEmpty(password) ||TextUtils.isEmpty(confirm)){
-            Toast.makeText(this, "Veillez remplire tous les champs svp!", Toast.LENGTH_SHORT).show();
+            Toast toast = new Toast(getApplicationContext());
+            toast.setGravity(Gravity.CENTER,0,0);
+            TextView tv = new TextView(RegisterActivity.this);
+            tv.setBackgroundColor(Color.WHITE);
+            tv.setTextColor(Color.RED);
+            tv.setTextSize(15);
+
+            Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
+            tv.setTypeface(t);
+            tv.setPadding(10,10,10,10);
+            tv.setText("Tous les champs sont requis");
+            toast.setView(tv);
+            toast.setDuration(Toast.LENGTH_LONG);
+            toast.show();
+
+            //Toast.makeText(this, "Veillez remplire tous les champs svp!", Toast.LENGTH_SHORT).show();
         }
         else if(!(password.equals(confirm))){
-            Toast.makeText(this, "Les deux mots de passe ne pas sont pas les même", Toast.LENGTH_SHORT).show();
+            Toast toast = new Toast(getApplicationContext());
+            toast.setGravity(Gravity.CENTER,0,0);
+            TextView tv = new TextView(RegisterActivity.this);
+            tv.setBackgroundColor(Color.WHITE);
+            tv.setTextColor(Color.RED);
+            tv.setTextSize(15);
+
+            Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
+            tv.setTypeface(t);
+            tv.setPadding(10,10,10,10);
+            tv.setText("Les deux mots de passe ne sont pas les mêmes");
+            toast.setView(tv);
+            toast.setDuration(Toast.LENGTH_LONG);
+            toast.show();
+
+           // Toast.makeText(this, "Les deux mots de passe ne pas sont pas les même", Toast.LENGTH_SHORT).show();
         }
         else if (profil.equals("vide")){
-            Toast.makeText(this, "Veillez choisir un profil svp!", Toast.LENGTH_SHORT).show();
+            Toast toast = new Toast(getApplicationContext());
+            toast.setGravity(Gravity.CENTER,0,0);
+            TextView tv = new TextView(RegisterActivity.this);
+            tv.setBackgroundColor(Color.WHITE);
+            tv.setTextColor(Color.RED);
+            tv.setTextSize(15);
+
+            Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
+            tv.setTypeface(t);
+            tv.setPadding(10,10,10,10);
+            tv.setText("Veillez choisir un profil");
+            toast.setDuration(Toast.LENGTH_LONG);
+            toast.setView(tv);
+            toast.show();
+
+            //Toast.makeText(this, "Veillez choisir un profil svp!", Toast.LENGTH_SHORT).show();
         }
 
         else {
@@ -173,7 +222,22 @@ public class RegisterActivity extends AppCompatActivity {
         if (network==null || !network.isConnected())
         {
             loadingBar.dismiss();
-            Toast.makeText(this, "Vous n'avez pas accées à internet", Toast.LENGTH_SHORT).show();
+            Toast toast = new Toast(getApplicationContext());
+            toast.setGravity(Gravity.CENTER,0,0);
+            TextView tv = new TextView(RegisterActivity.this);
+            tv.setBackgroundColor(Color.WHITE);
+            tv.setTextColor(Color.RED);
+            tv.setTextSize(15);
+
+            Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
+            tv.setTypeface(t);
+            tv.setPadding(10,10,10,10);
+            tv.setText("Vérifiez votre connection internet");
+            toast.setView(tv);
+            toast.setDuration(Toast.LENGTH_LONG);
+            toast.show();
+
+            //Toast.makeText(this, "Vous n'avez pas accées à internet", Toast.LENGTH_SHORT).show();
         }
         else
         {
@@ -207,12 +271,42 @@ public class RegisterActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                   if (task.isSuccessful()){
-                                      Toast.makeText(RegisterActivity.this, "Votre demande a été bien traité merci..", Toast.LENGTH_SHORT).show();
+                                      Toast toast = new Toast(getApplicationContext());
+                                      toast.setGravity(Gravity.CENTER,0,0);
+                                      TextView tv = new TextView(RegisterActivity.this);
+                                      tv.setBackgroundColor(Color.WHITE);
+                                      tv.setTextColor(Color.BLUE);
+                                      tv.setTextSize(15);
+
+                                      Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
+                                      tv.setTypeface(t);
+                                      tv.setPadding(10,10,10,10);
+                                      tv.setText("Inscription réussie !!!");
+                                      toast.setView(tv);
+                                      toast.setDuration(Toast.LENGTH_LONG);
+                                      toast.show();
+
+                                    //  Toast.makeText(RegisterActivity.this, "Votre demande a été bien traité merci..", Toast.LENGTH_SHORT).show();
                                         loadingBar.dismiss();
                                       Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
                                       startActivity(intent);
                                   }
                                   else {
+                                      Toast toast = new Toast(getApplicationContext());
+                                      toast.setGravity(Gravity.CENTER,0,0);
+                                      TextView tv = new TextView(RegisterActivity.this);
+                                      tv.setBackgroundColor(Color.WHITE);
+                                      tv.setTextColor(Color.RED);
+                                      tv.setTextSize(15);
+
+                                      Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
+                                      tv.setTypeface(t);
+                                      tv.setPadding(10,10,10,10);
+                                      tv.setText("Une erreur est intervenue veillez recommencer svp");
+                                      toast.setView(tv);
+                                      toast.setDuration(Toast.LENGTH_LONG);
+                                      toast.show();
+
                                       Toast.makeText(RegisterActivity.this, "Erreur de connection veillez recommencer svp!!", Toast.LENGTH_SHORT).show();
 
                                   }

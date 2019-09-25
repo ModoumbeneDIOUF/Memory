@@ -2,17 +2,27 @@ package com.mind.memory.Model;
 
 public class    ListVente {
 
-    private String quantiteVendu,prixVente,dateExpiration,produitVenduId,imageVented;
+    private String quantiteVendu,prixVente,dateExpiration,produitVenduId,imageVented,produitRandomKey;
 
     public ListVente() {
     }
 
-    public ListVente(String quantiteVendu, String prixVente, String dateExpiration,String produitVenduId,String imageVented) {
+    public ListVente(String quantiteVendu, String prixVente, String dateExpiration,String produitVenduId,String imageVented,String produitRandomKey) {
         this.imageVented = imageVented;
         this.quantiteVendu = quantiteVendu;
         this.prixVente = prixVente;
         this.dateExpiration = dateExpiration;
         this.produitVenduId = produitVenduId;
+        this.produitRandomKey = produitRandomKey;
+
+    }
+
+    public String getProduitRandomKey() {
+        return produitRandomKey;
+    }
+
+    public void setProduitRandomKey(String produitRandomKey) {
+        this.produitRandomKey = produitRandomKey;
     }
 
     public String getProduitVenduId() {

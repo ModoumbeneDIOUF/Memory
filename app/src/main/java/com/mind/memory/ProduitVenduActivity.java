@@ -12,20 +12,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.mind.memory.Model.ListVente;
 import com.mind.memory.ViewHolder.ProduitVenduViewHolder;
 import com.squareup.picasso.Picasso;
+
+import java.util.Calendar;
 
 public class ProduitVenduActivity extends AppCompatActivity {
     private ListView listView;
     Context context;
     private ProgressDialog progressDialog;
-    private DatabaseReference VenduRef;
+    private DatabaseReference VenduRef,deleteRef;
+
+   ;
 
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
@@ -44,12 +53,17 @@ public class ProduitVenduActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(ProduitVenduActivity.this);
 
         VenduRef = FirebaseDatabase.getInstance().getReference().child("ProduitVendu");
+        deleteRef = FirebaseDatabase.getInstance().getReference();
+
 
     }
 
+
     @Override
     protected void onStart() {
+
         super.onStart();
+
         FirebaseRecyclerOptions<ListVente> options = new
                 FirebaseRecyclerOptions.Builder<ListVente>()
                 .setQuery(VenduRef,ListVente.class)
@@ -64,7 +78,6 @@ public class ProduitVenduActivity extends AppCompatActivity {
                         holder.dateExpirationVendu.setText(model.getDateExpiration());
                         holder.prixVendu.setText(model.getPrixVente());
                         Picasso.get().load(model.getImageVented()).into(holder.imageNourritureVendu);
-
                         holder.itemView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {

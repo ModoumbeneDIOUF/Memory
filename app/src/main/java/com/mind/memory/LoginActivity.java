@@ -3,12 +3,15 @@ package com.mind.memory;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -86,10 +89,25 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void LoginUser() {
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER,0,0);
+        TextView tv = new TextView(LoginActivity.this);
+        tv.setBackgroundColor(Color.WHITE);
+        tv.setTextColor(Color.RED);
+        tv.setTextSize(15);
+
+        Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
+        tv.setTypeface(t);
+        tv.setPadding(10,10,10,10);
+        tv.setText("Tous les champs sont requis");
+        toast.setView(tv);
+        toast.setDuration(Toast.LENGTH_LONG);
+
         String phone = phoneLogin.getText().toString();
         String password = passwordLogin.getText().toString();
         if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(password)){
-            Toast.makeText(this, "Tous les champs sont requis", Toast.LENGTH_SHORT).show();
+
+            toast.show();
         }
         else {
             loadingBar.setTitle("Connection");
@@ -109,6 +127,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void AccessToAccout(final String phone,final String password) {
+
         final DatabaseReference RootRef;
         RootRef = FirebaseDatabase.getInstance().getReference();
 
@@ -119,24 +138,96 @@ public class LoginActivity extends AppCompatActivity {
                     Users usersData = dataSnapshot.child("Users").child(phone).getValue(Users.class);
                     if (usersData.getPassword().equals(password)){
                         loadingBar.dismiss();
-                        Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
-                        sendFirstName = dataSnapshot.child("Users").child(phone).child("prenom").getValue().toString();
-                        sendName = dataSnapshot.child("Users").child(phone).child("nom").getValue().toString();
-                        intent.putExtra("prenom",sendFirstName);
-                        intent.putExtra("nom",sendName);
-                        startActivity(intent);
-                        loadingBar.dismiss();
-                        Toast.makeText(LoginActivity.this,"Bienvenue "+ dataSnapshot.child("Users").child(phone).child("prenom").getValue().toString()+" "+dataSnapshot.child("Users").child(phone).child("nom").getValue().toString(), Toast.LENGTH_LONG).show();
-                    }
+                        if (dataSnapshot.child("Users").child(phone).child("profil").getValue().toString().equals("Volontaire"))
+                        {
+                            Intent intent = new Intent(LoginActivity.this,AdminHomeActivity.class);
+                            sendFirstName = dataSnapshot.child("Users").child(phone).child("prenom").getValue().toString();
+                            sendName = dataSnapshot.child("Users").child(phone).child("nom").getValue().toString();
+                            intent.putExtra("prenom",sendFirstName);
+                            intent.putExtra("nom",sendName);
+                            startActivity(intent);
+                            loadingBar.dismiss();
+
+                            Toast toast = new Toast(getApplicationContext());
+                            toast.setGravity(Gravity.CENTER,0,0);
+                            TextView tv = new TextView(LoginActivity.this);
+                            tv.setBackgroundColor(Color.WHITE);
+                            tv.setTextColor(Color.BLUE);
+                            tv.setTextSize(15);
+
+                            Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
+                            tv.setTypeface(t);
+                            tv.setPadding(10,10,10,10);
+                            tv.setText("Bienvenue "+ dataSnapshot.child("Users").child(phone).child("prenom").getValue().toString()+" "+dataSnapshot.child("Users").child(phone).child("nom").getValue().toString());
+                            toast.setView(tv);
+                            toast.setDuration(Toast.LENGTH_LONG);
+                            toast.show();
+
+                        }
+                        else{
+                            Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+                            sendFirstName = dataSnapshot.child("Users").child(phone).child("prenom").getValue().toString();
+                            sendName = dataSnapshot.child("Users").child(phone).child("nom").getValue().toString();
+                            intent.putExtra("prenom",sendFirstName);
+                            intent.putExtra("nom",sendName);
+                            startActivity(intent);
+                            loadingBar.dismiss();
+
+                            Toast toast = new Toast(getApplicationContext());
+                            toast.setGravity(Gravity.CENTER,0,0);
+                            TextView tv = new TextView(LoginActivity.this);
+                            tv.setBackgroundColor(Color.WHITE);
+                            tv.setTextColor(Color.BLUE);
+                            tv.setTextSize(15);
+
+                            Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
+                            tv.setTypeface(t);
+                            tv.setPadding(10,10,10,10);
+                            tv.setText("Bienvenue "+ dataSnapshot.child("Users").child(phone).child("prenom").getValue().toString()+" "+dataSnapshot.child("Users").child(phone).child("nom").getValue().toString());
+                            toast.setView(tv);
+                            toast.setDuration(Toast.LENGTH_LONG);
+                            toast.show();
+
+                        }
+                       }
                     else {
                         loadingBar.dismiss();
-                        Toast.makeText(LoginActivity.this, "Le mot de passe est incorrecte", Toast.LENGTH_SHORT).show();
+
+                        Toast toast = new Toast(getApplicationContext());
+                        toast.setGravity(Gravity.CENTER,0,0);
+                        TextView tv = new TextView(LoginActivity.this);
+                        tv.setBackgroundColor(Color.WHITE);
+                        tv.setTextColor(Color.RED);
+                        tv.setTextSize(15);
+
+                        Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
+                        tv.setTypeface(t);
+                        tv.setPadding(10,10,10,10);
+                        tv.setText("Mot de passe est incorrecte");
+                        toast.setView(tv);
+                        toast.setDuration(Toast.LENGTH_LONG);
+                        toast.show();
                     }
                 }
                 else {
-                    Toast.makeText(LoginActivity.this, "Compte inexistant", Toast.LENGTH_SHORT).show();
+                    Toast toast = new Toast(getApplicationContext());
+                    toast.setGravity(Gravity.CENTER,0,0);
+                    TextView tv = new TextView(LoginActivity.this);
+                    tv.setBackgroundColor(Color.WHITE);
+                    tv.setTextColor(Color.RED);
+                    tv.setTextSize(15);
+
+                    Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
+                    tv.setTypeface(t);
+                    tv.setPadding(10,10,10,10);
+                    tv.setText("Compte inexistant");
+                    toast.setView(tv);
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.show();
+
                     loadingBar.dismiss();
-                    Toast.makeText(LoginActivity.this, "Veillez vérifier ", Toast.LENGTH_SHORT).show();
+
+
                 }
             }
 

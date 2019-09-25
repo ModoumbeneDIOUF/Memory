@@ -1,18 +1,28 @@
 package com.mind.memory.Model;
 
 public class Users {
-    private String prenom,nom,adresse,profil,numero,password;
+    private String prenom,nom,adresse,profil,numero,password,phone;
+
 
     public Users() {
     }
 
-    public Users(String prenom, String nom, String adresse, String profil, String numero, String password) {
+    public Users(String prenom, String nom, String adresse, String profil, String numero,String phone, String password) {
         this.prenom = prenom;
         this.nom = nom;
         this.adresse = adresse;
         this.profil = profil;
         this.numero = numero;
+        this.phone = phone;
         this.password = password;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getPrenom() {

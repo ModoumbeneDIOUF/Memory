@@ -30,7 +30,6 @@ public class ResponsableActivity extends AppCompatActivity {
             }
         });
 
-      //  databaseref = FirebaseDatabase.getInstance().getReference().child("Users");
 
          }
 

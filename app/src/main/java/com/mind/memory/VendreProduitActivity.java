@@ -7,12 +7,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -40,7 +42,8 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 
 public class VendreProduitActivity extends AppCompatActivity {
-    private EditText vendreQuantite, vendrePrix, vendreExpiretion;
+    private EditText vendreQuantite, vendrePrix;
+    private TextView vendreExpiretion;
     String quantite, prix, expiration, saveCurrentDate, saveCurrentTime;
     private ImageView vendreImage;
     private Button vendreBtn;
@@ -52,6 +55,7 @@ public class VendreProduitActivity extends AppCompatActivity {
     private StorageReference produitImageRef;
     private DatabaseReference produitRef;
     private ProgressDialog loadingBar;
+    private DatePickerDialog.OnDateSetListener dateSetListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,15 +96,24 @@ public class VendreProduitActivity extends AppCompatActivity {
                 dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
 
                 datePickerDialog = new DatePickerDialog(VendreProduitActivity.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int month, int day) {
-                                vendreExpiretion.setText(day + "/" + month + "/" +year);
-                            }
-                        },year,month,dayOfMonth);
+                                    android.R.style.Theme_Holo_Dialog_MinWidth,
+                                    dateSetListener,
+                                    year,month,dayOfMonth);
+                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
                 datePickerDialog.show();
             }
         });
+
+        dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                month = month + 1;
+
+                String date = month + "/" + day + "/" + year;
+                vendreExpiretion.setText(date);
+            }
+        };
 
     }
 

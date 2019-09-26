@@ -1,7 +1,9 @@
 package com.mind.memory;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -11,11 +13,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,37 +30,28 @@ import com.mind.memory.Model.ListVente;
 import com.mind.memory.ViewHolder.ProduitVenduViewHolder;
 import com.squareup.picasso.Picasso;
 
-import java.util.Calendar;
-
-public class ProduitVenduActivity extends AppCompatActivity {
+public class AdminProduitVenduActivity extends AppCompatActivity {
     Context context;
-    private ProgressDialog progressDialog;
-    private DatabaseReference VenduRef,deleteRef;
+    private DatabaseReference VenduRef;
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_produit_vendu);
+        setContentView(R.layout.activity_admin_produit_vendu);
 
-        recyclerView = findViewById(R.id.listProduitVendre);
+        recyclerView = findViewById(R.id.admin_listProduitVendre);
         recyclerView.setHasFixedSize(true);
 
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        progressDialog = new ProgressDialog(ProduitVenduActivity.this);
-
         VenduRef = FirebaseDatabase.getInstance().getReference().child("ProduitVendu");
-        deleteRef = FirebaseDatabase.getInstance().getReference();
 
     }
 
-
     @Override
     protected void onStart() {
-
         super.onStart();
 
         FirebaseRecyclerOptions<ListVente> options = new
@@ -79,9 +71,47 @@ public class ProduitVenduActivity extends AppCompatActivity {
                         holder.itemView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                Intent intent = new Intent(ProduitVenduActivity.this,AcheterUnProduitActivity.class);
-                                intent.putExtra("produitVenduId",model.getProduitVenduId());
-                                startActivity(intent);
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(AdminProduitVenduActivity.this);
+                                builder.setTitle("Suppression");builder.setMessage("Voulez-vous vraiment supprimer ce produit ?");
+                                builder.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Query query =VenduRef.orderByChild("produitVenduId").equalTo(model.getProduitVenduId());
+                                        query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                for (DataSnapshot ds:dataSnapshot.getChildren()){
+                                                    ds.getRef().removeValue();
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+                                        StorageReference imrageRef = FirebaseStorage.getInstance().getReferenceFromUrl(model.getImageVented());
+                                        imrageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+
+                                            }
+                                        });
+                                    }
+                                });
+                                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                });
+                                builder.create().show();
                             }
                         });
                     }
@@ -98,6 +128,6 @@ public class ProduitVenduActivity extends AppCompatActivity {
 
         recyclerView.setAdapter(adapter);
         adapter.startListening();
-    }
 
+    }
 }

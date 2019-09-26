@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,7 +34,8 @@ public class LoginActivity extends AppCompatActivity {
     private TextView forgetPassword;
     private ProgressDialog loadingBar;
     public String sendName,sendFirstName;
-
+    boolean doubleBackToExitPressedOnce = false;
+    Toast toast;
 
 
     @Override
@@ -72,6 +74,26 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            toast.cancel();
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        toast = Toast.makeText(this, "Tapotez de nouveau pour quitter", Toast.LENGTH_SHORT);
+        toast.show();
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
 
     private void haveInternetConnection() {
@@ -138,8 +160,7 @@ public class LoginActivity extends AppCompatActivity {
                     Users usersData = dataSnapshot.child("Users").child(phone).getValue(Users.class);
                     if (usersData.getPassword().equals(password)){
                         loadingBar.dismiss();
-                        if (dataSnapshot.child("Users").child(phone).child("profil").getValue().toString().equals("Volontaire"))
-                        {
+                        if (dataSnapshot.child("Users").child(phone).child("profil").getValue().toString().equals("admin")){
                             Intent intent = new Intent(LoginActivity.this,AdminHomeActivity.class);
                             sendFirstName = dataSnapshot.child("Users").child(phone).child("prenom").getValue().toString();
                             sendName = dataSnapshot.child("Users").child(phone).child("nom").getValue().toString();
@@ -189,6 +210,7 @@ public class LoginActivity extends AppCompatActivity {
                             toast.show();
 
                         }
+
                        }
                     else {
                         loadingBar.dismiss();

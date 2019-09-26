@@ -15,8 +15,11 @@ import android.widget.ListView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mind.memory.Model.NourritureOffer;
 import com.mind.memory.ViewHolder.NorritureOfertViewHolder;
 import com.squareup.picasso.Picasso;
@@ -24,7 +27,6 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class NourritureOffertActivity extends AppCompatActivity {
-    private ListView listView;
     private ProgressDialog progressDialog;
     private DatabaseReference NourritureRef;
     Context context;
@@ -47,7 +49,6 @@ public class NourritureOffertActivity extends AppCompatActivity {
 
         NourritureRef = FirebaseDatabase.getInstance().getReference().child("Nourriture");
 
-
         //listView = findViewById(R.id.listNourritureOffert);
         //models = DetailNourritureOffert.getListOffert();
 
@@ -57,6 +58,19 @@ public class NourritureOffertActivity extends AppCompatActivity {
     protected void onStart() {
 
         super.onStart();
+
+        NourritureRef.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         FirebaseRecyclerOptions<NourritureOffer> options =
                 new FirebaseRecyclerOptions.Builder<NourritureOffer>()
                         .setQuery(NourritureRef,NourritureOffer.class)
@@ -94,7 +108,6 @@ public class NourritureOffertActivity extends AppCompatActivity {
 
         adapter.startListening();
         recyclerView.setAdapter(adapter);
-
 
     }
 

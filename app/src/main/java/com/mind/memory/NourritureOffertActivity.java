@@ -25,6 +25,7 @@ import com.mind.memory.ViewHolder.NorritureOfertViewHolder;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class NourritureOffertActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
@@ -32,6 +33,7 @@ public class NourritureOffertActivity extends AppCompatActivity {
     Context context;
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
+    Calendar calendar;
 
 
     @Override
@@ -80,9 +82,15 @@ public class NourritureOffertActivity extends AppCompatActivity {
                 new FirebaseRecyclerAdapter<NourritureOffer, NorritureOfertViewHolder>(options) {
                     @Override
                     protected void onBindViewHolder(@NonNull NorritureOfertViewHolder holder, int position, @NonNull final NourritureOffer model) {
+                       calendar = Calendar.getInstance();
+                       int day = calendar.get(Calendar.DAY_OF_MONTH);
+
                         holder.typeNourriture.setText(model.getDescription());
                         holder.proveNourriture.setText(model.getProvenance());
                         holder.adressNourriture.setText(model.getLieu());
+
+                            holder.jourRestantNou.setText(model.getJourRestant());
+
                         holder.contactNourriture.setText(model.getNumero());
                         Picasso.get().load(model.getImage()).resize(500,500 ).into(holder.imageViewNourriture);
 

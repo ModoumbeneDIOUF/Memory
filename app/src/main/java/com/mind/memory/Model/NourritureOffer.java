@@ -1,13 +1,13 @@
 package com.mind.memory.Model;
 
 public class NourritureOffer {
-    private String description,lieu,numero,quantite,image,nourritureId,provenance,time,date;
+    private String description,lieu,numero,quantite,image,nourritureId,provenance,time,date,jourRestant;
 
 
     public NourritureOffer() {
     }
 
-    public NourritureOffer(String description, String lieu, String numero, String quantite, String image, String nourritureId, String provenance, String time, String date) {
+    public NourritureOffer(String description, String lieu, String numero, String quantite, String image, String nourritureId, String provenance, String jourRestant, String time, String date) {
         this.description = description;
         this.lieu = lieu;
         this.numero = numero;
@@ -17,6 +17,15 @@ public class NourritureOffer {
         this.provenance = provenance;
         this.time = time;
         this.date = date;
+        this.jourRestant = jourRestant;
+    }
+
+    public String getJourRestant() {
+        return jourRestant;
+    }
+
+    public void setJourRestant(String jourRestant) {
+        this.jourRestant = jourRestant;
     }
 
     public String getDescription() {

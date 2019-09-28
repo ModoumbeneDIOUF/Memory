@@ -43,11 +43,12 @@ import java.util.HashMap;
 
 public class NewNourritureActivity extends AppCompatActivity {
     private ImageView nouritureImage;
-    private EditText type,provenance,lieu,contact,quantite;
+    private EditText type,provenance,lieu,contact,quantite,jourRestant;
     private static final int galleryPick=1;
     private Button btnValider;
     private Uri imageUri,targetUri;
-    String typen,provenancen,lieun,quantiten,contactn,saveCurrentDate,saveCurrentTime;
+    String typen,provenancen,lieun,quantiten,contactn,saveCurrentDate,saveCurrentTime,jour;
+    int day;
     private String nourritureRandomKey,dowloadImageUri;
     private StorageReference nourritureImageRef;
     private DatabaseReference nourritureRef;
@@ -71,6 +72,7 @@ public class NewNourritureActivity extends AppCompatActivity {
         lieu = findViewById( R.id.lieu);
         quantite = findViewById(R.id.quantiteNoutiture);
         contact = findViewById(R.id.contactNoutiture);
+        jourRestant = findViewById(R.id.jourRestantNourriture);
         btnValider = findViewById(R.id.btnAddNourriture);
 
 
@@ -93,9 +95,7 @@ public class NewNourritureActivity extends AppCompatActivity {
 
 
     private void openGallery(){
-        Intent intent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, 0);
+       CropImage.activity().start(NewNourritureActivity.this);
 
     }
 
@@ -103,29 +103,14 @@ public class NewNourritureActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK){
-            targetUri = data.getData();
-             CropImage.activity(targetUri)
-                     .setGuidelines(CropImageView.Guidelines.ON)
-                     .setAspectRatio(1,1)
-                     .start(this);
+            if (requestCode== CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
+                CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
-            if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
-                CropImage.ActivityResult  result = CropImage.getActivityResult(data);
                 if (resultCode == RESULT_OK){
                     targetUri = result.getUri();
-                    Bitmap bitmap;
-                    try {
-                        bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUri));
-                        nouritureImage.setImageBitmap(bitmap);
-                    } catch (FileNotFoundException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+                    nouritureImage.setImageURI(targetUri);
                 }
             }
-
-        }
 
 
         }
@@ -137,6 +122,7 @@ public class NewNourritureActivity extends AppCompatActivity {
         lieun = lieu.getText().toString();
         quantiten = quantite.getText().toString();
         contactn = contact.getText().toString();
+        jour = jourRestant.getText().toString();
 
         if (targetUri == null)
         {
@@ -156,7 +142,7 @@ public class NewNourritureActivity extends AppCompatActivity {
             toast.show();
 
         }
-        else if(TextUtils.isEmpty(typen) || TextUtils.isEmpty(provenancen) || TextUtils.isEmpty(lieun) || TextUtils.isEmpty(contactn) || TextUtils.isEmpty(quantiten))
+        else if(TextUtils.isEmpty(typen) || TextUtils.isEmpty(jour) || TextUtils.isEmpty(provenancen) || TextUtils.isEmpty(lieun) || TextUtils.isEmpty(contactn) || TextUtils.isEmpty(quantiten))
         {
             Toast toast = new Toast(getApplicationContext());
             toast.setGravity(Gravity.CENTER,0,0);
@@ -198,6 +184,8 @@ public class NewNourritureActivity extends AppCompatActivity {
 
         SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
         saveCurrentTime = currentTime.format(calendar.getTime());
+
+        day = calendar.get(Calendar.DAY_OF_MONTH);
 
         nourritureRandomKey = saveCurrentDate + saveCurrentTime;
 
@@ -266,6 +254,7 @@ public class NewNourritureActivity extends AppCompatActivity {
         nourritureHashmap.put("lieu",lieun);
         nourritureHashmap.put("image",dowloadImageUri);
         nourritureHashmap.put("quantite",quantiten);
+        nourritureHashmap.put("jourRestant",jour+day);
         nourritureHashmap.put("numero",contactn);
 
         nourritureRef.child(nourritureRandomKey).updateChildren(nourritureHashmap)
@@ -321,6 +310,7 @@ public class NewNourritureActivity extends AppCompatActivity {
         quantite.setText("");
         lieu.setText("");
         contact.setText("");
+        jourRestant.setText("");
         nouritureImage.setImageResource(R.mipmap.cam);
     }
 

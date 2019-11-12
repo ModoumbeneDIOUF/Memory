@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -25,7 +26,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+import com.mind.memory.Model.LoginResponse;
 import com.mind.memory.Model.Users;
+import com.mind.memory.Retrof.RetrofitRegister;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
     private Button btnLogin;
@@ -62,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                haveInternetConnection();
+                LoginUser();
 
             }
         });
@@ -96,18 +107,6 @@ public class LoginActivity extends AppCompatActivity {
         }, 2000);
     }
 
-    private void haveInternetConnection() {
-        NetworkInfo network =((ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
-        if (network==null || !network.isConnected())
-        {
-            Toast.makeText(this, "Vous n'avez pas accées à internet", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            LoginUser();
-        }
-
-    }
 
 
     private void LoginUser() {
@@ -142,129 +141,45 @@ public class LoginActivity extends AppCompatActivity {
             loadingBar.setCancelable(false);
             loadingBar.setCanceledOnTouchOutside(false);
             loadingBar.show();
-            AccessToAccout(phone,password);
+            verif(phoneLogin.getText().toString(),passwordLogin.getText().toString());
             Clean();
         }
     }
 
 
-    private void AccessToAccout(final String phone,final String password) {
-
-        final DatabaseReference RootRef;
-        RootRef = FirebaseDatabase.getInstance().getReference();
-
-        RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+    private void verif(String d1,String d2) {
+        Call<LoginResponse> call = RetrofitRegister
+                                    .getInstance()
+                                    .getApi().userLogin(d1,d2);
+        call.enqueue(new Callback<LoginResponse>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.child("Users").child(phone).exists()){
-                    Users usersData = dataSnapshot.child("Users").child(phone).getValue(Users.class);
-                    if (usersData.getPassword().equals(password)){
-                        loadingBar.dismiss();
-                        if (dataSnapshot.child("Users").child(phone).child("profil").getValue().toString().equals("admin")){
-                            Intent intent = new Intent(LoginActivity.this,AdminHomeActivity.class);
-                            sendFirstName = dataSnapshot.child("Users").child(phone).child("prenom").getValue().toString();
-                            sendName = dataSnapshot.child("Users").child(phone).child("nom").getValue().toString();
-                            intent.putExtra("prenom",sendFirstName);
-                            intent.putExtra("nom",sendName);
-                            startActivity(intent);
-                            loadingBar.dismiss();
-
-                            Toast toast = new Toast(getApplicationContext());
-                            toast.setGravity(Gravity.CENTER,0,0);
-                            TextView tv = new TextView(LoginActivity.this);
-                            tv.setBackgroundColor(Color.WHITE);
-                            tv.setTextColor(Color.BLUE);
-                            tv.setTextSize(15);
-
-                            Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
-                            tv.setTypeface(t);
-                            tv.setPadding(10,10,10,10);
-                            tv.setText("Bienvenue "+ dataSnapshot.child("Users").child(phone).child("prenom").getValue().toString()+" "+dataSnapshot.child("Users").child(phone).child("nom").getValue().toString());
-                            toast.setView(tv);
-                            toast.setDuration(Toast.LENGTH_LONG);
-                            toast.show();
-
-                        }
-                        else{
-                            Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
-                            sendFirstName = dataSnapshot.child("Users").child(phone).child("prenom").getValue().toString();
-                            sendName = dataSnapshot.child("Users").child(phone).child("nom").getValue().toString();
-                            intent.putExtra("prenom",sendFirstName);
-                            intent.putExtra("nom",sendName);
-                            startActivity(intent);
-                            loadingBar.dismiss();
-
-                            Toast toast = new Toast(getApplicationContext());
-                            toast.setGravity(Gravity.CENTER,0,0);
-                            TextView tv = new TextView(LoginActivity.this);
-                            tv.setBackgroundColor(Color.WHITE);
-                            tv.setTextColor(Color.BLUE);
-                            tv.setTextSize(15);
-
-                            Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
-                            tv.setTypeface(t);
-                            tv.setPadding(10,10,10,10);
-                            tv.setText("Bienvenue "+ dataSnapshot.child("Users").child(phone).child("prenom").getValue().toString()+" "+dataSnapshot.child("Users").child(phone).child("nom").getValue().toString());
-                            toast.setView(tv);
-                            toast.setDuration(Toast.LENGTH_LONG);
-                            toast.show();
-
-                        }
-
-                       }
-                    else {
-                        loadingBar.dismiss();
-
-                        Toast toast = new Toast(getApplicationContext());
-                        toast.setGravity(Gravity.CENTER,0,0);
-                        TextView tv = new TextView(LoginActivity.this);
-                        tv.setBackgroundColor(Color.WHITE);
-                        tv.setTextColor(Color.RED);
-                        tv.setTextSize(15);
-
-                        Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
-                        tv.setTypeface(t);
-                        tv.setPadding(10,10,10,10);
-                        tv.setText("Mot de passe est incorrecte");
-                        toast.setView(tv);
-                        toast.setDuration(Toast.LENGTH_LONG);
-                        toast.show();
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                loadingBar.dismiss();
+                LoginResponse loginResponse = response.body();
+                if (!loginResponse.isError()){
+                    //on test si on a un Donneur on un vendeur
+                    if (loginResponse.getProfil().equals("Donneur") || loginResponse.getProfil().equals("Vendeur")){
+                        Toast.makeText(LoginActivity.this, "Vendeur ou Donneur", Toast.LENGTH_SHORT).show();
                     }
-                }
-                else {
-                    Toast toast = new Toast(getApplicationContext());
-                    toast.setGravity(Gravity.CENTER,0,0);
-                    TextView tv = new TextView(LoginActivity.this);
-                    tv.setBackgroundColor(Color.WHITE);
-                    tv.setTextColor(Color.RED);
-                    tv.setTextSize(15);
+                    else{
+                        Toast.makeText(LoginActivity.this, "Volontaire", Toast.LENGTH_SHORT).show();
+                    }
 
-                    Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
-                    tv.setTypeface(t);
-                    tv.setPadding(10,10,10,10);
-                    tv.setText("Compte inexistant");
-                    toast.setView(tv);
-                    toast.setDuration(Toast.LENGTH_LONG);
-                    toast.show();
-
-                    loadingBar.dismiss();
-
-
+                }else {
+                    Toast.makeText(LoginActivity.this, loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public void onFailure(Call<LoginResponse> call, Throwable throwable) {
 
             }
         });
-
     }
 
     private void Clean() {
         phoneLogin.setText("");
         passwordLogin.setText("");
     }
-
 
 }

@@ -14,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.telecom.Call;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -40,6 +41,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+import com.mind.memory.Retrof.RetrofitRegister;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -49,6 +55,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+
+import okhttp3.ResponseBody;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -211,120 +221,42 @@ public class RegisterActivity extends AppCompatActivity {
             loadingBar.setCanceledOnTouchOutside(false);
             loadingBar.show();
 
-            haveInternetConnection();
+
+            save(prenom,nom,adresse,profil,phone,password);
+            loadingBar.dismiss();
             Clean();
         }
     }
 
-
-    private void haveInternetConnection() {
-        NetworkInfo network =((ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
-        if (network==null || !network.isConnected())
-        {
-            loadingBar.dismiss();
-            Toast toast = new Toast(getApplicationContext());
-            toast.setGravity(Gravity.CENTER,0,0);
-            TextView tv = new TextView(RegisterActivity.this);
-            tv.setBackgroundColor(Color.WHITE);
-            tv.setTextColor(Color.RED);
-            tv.setTextSize(15);
-
-            Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
-            tv.setTypeface(t);
-            tv.setPadding(10,10,10,10);
-            tv.setText("Vérifiez votre connection internet");
-            toast.setView(tv);
-            toast.setDuration(Toast.LENGTH_LONG);
-            toast.show();
-
-            //Toast.makeText(this, "Vous n'avez pas accées à internet", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-
-
-            ValidatePhoneNumber(prenom,nom,adresse,profil,phone,password);
-
-        }
-
+    private void save(String d1,String d2,String d3,String d4,String d5,String d6) {
+        String url = "http://192.168.43.216/back/public/api/utilisateurs";
+        Ion.with(RegisterActivity.this)
+                .load("POST",url)
+                .setBodyParameter("prenom",d1)
+                .setBodyParameter("nom",d2)
+                .setBodyParameter("adresse",d3)
+                .setBodyParameter("profil",d4)
+                .setBodyParameter("numero",d5)
+                .setBodyParameter("password",d6)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try{
+                            String mess =result.get("inscription").getAsString();
+                            if (mess.equals("ok")){
+                                Toast.makeText(RegisterActivity.this, "Bien", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Toast.makeText(RegisterActivity.this, "Mal", Toast.LENGTH_SHORT).show();
+                            }
+                        }catch (Exception er){
+                            Toast.makeText(RegisterActivity.this, "Erreur", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
-
-    private void ValidatePhoneNumber(final String prenom, final String nom, final String adresse, final String profil, final String phone, final String password) {
-        final DatabaseReference RootRef;
-        RootRef = FirebaseDatabase.getInstance().getReference();
-
-        RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (!(dataSnapshot.child("Users").child(phone).exists())){
-                    HashMap<String,Object> userDataMap = new HashMap<>();
-                    userDataMap.put("phone",phone);
-                    userDataMap.put("prenom",prenom);
-                    userDataMap.put("nom",nom);
-                    userDataMap.put("adresse",adresse);
-                    userDataMap.put("profil",profil);
-                    userDataMap.put("password",password);
-
-                    RootRef.child("Users").child(phone).updateChildren(userDataMap)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                  if (task.isSuccessful()){
-                                      Toast toast = new Toast(getApplicationContext());
-                                      toast.setGravity(Gravity.CENTER,0,0);
-                                      TextView tv = new TextView(RegisterActivity.this);
-                                      tv.setBackgroundColor(Color.WHITE);
-                                      tv.setTextColor(Color.BLUE);
-                                      tv.setTextSize(15);
-
-                                      Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
-                                      tv.setTypeface(t);
-                                      tv.setPadding(10,10,10,10);
-                                      tv.setText("Inscription réussie !!!");
-                                      toast.setView(tv);
-                                      toast.setDuration(Toast.LENGTH_LONG);
-                                      toast.show();
-
-                                    //  Toast.makeText(RegisterActivity.this, "Votre demande a été bien traité merci..", Toast.LENGTH_SHORT).show();
-                                        loadingBar.dismiss();
-                                      Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
-                                      startActivity(intent);
-                                  }
-                                  else {
-                                      Toast toast = new Toast(getApplicationContext());
-                                      toast.setGravity(Gravity.CENTER,0,0);
-                                      TextView tv = new TextView(RegisterActivity.this);
-                                      tv.setBackgroundColor(Color.WHITE);
-                                      tv.setTextColor(Color.RED);
-                                      tv.setTextSize(15);
-
-                                      Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
-                                      tv.setTypeface(t);
-                                      tv.setPadding(10,10,10,10);
-                                      tv.setText("Une erreur est intervenue veillez recommencer svp");
-                                      toast.setView(tv);
-                                      toast.setDuration(Toast.LENGTH_LONG);
-                                      toast.show();
-
-                                      Toast.makeText(RegisterActivity.this, "Erreur de connection veillez recommencer svp!!", Toast.LENGTH_SHORT).show();
-
-                                  }
-                                }
-                            });
-                }
-                else {
-                    loadingBar.dismiss();
-                    Toast.makeText(RegisterActivity.this, "Numero déja utilise veillez choisir au autre numéro", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
 
     private void Clean() {
         registerFirstName.setText("");
@@ -332,5 +264,6 @@ public class RegisterActivity extends AppCompatActivity {
         registerAdress.setText("");
         registerPhone.setText("");
         registerPassword.setText("");
+        registerPasswordConfirm.setText("");
     }
 }

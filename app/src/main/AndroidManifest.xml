@@ -11,7 +11,7 @@
     <uses-permission
         android:name="android.permission.MANAGE_DOCUMENTS"
         tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:allowBackup="true"
@@ -40,7 +40,6 @@
         <activity android:name=".RecupererNourritureActivity" />
         <activity android:name=".AcheterUnProduitActivity" />
         <activity android:name=".RenewPasswordActivity" />
-
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,7 +51,8 @@
         <activity android:name=".AdminHomeActivity" />
         <activity android:name=".ResponsableActivity" />
         <activity android:name=".AdminOffertActivity" />
-        <activity android:name=".AdminProduitVenduActivity"></activity>
+        <activity android:name=".AdminProduitVenduActivity" />
+        <activity android:name=".ListUtilisateur"></activity>
     </application>
 
 </manifest>

@@ -85,13 +85,13 @@ public class NourritureOffertActivity extends AppCompatActivity {
                        calendar = Calendar.getInstance();
                        int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-                        holder.typeNourriture.setText(model.getDescription());
-                        holder.proveNourriture.setText(model.getProvenance());
-                        holder.adressNourriture.setText(model.getLieu());
+                        holder.typeNourriture.setText(" Type de nourriture: "+model.getDescription());
+                        holder.proveNourriture.setText("Provenance: "+model.getProvenance());
+                        holder.adressNourriture.setText("Adresse: "+model.getLieu());
 
-                            holder.jourRestantNou.setText(model.getJourRestant());
+                        holder.jourRestantNou.setText("Jours restant:" +model.getJourRestant());
 
-                        holder.contactNourriture.setText(model.getNumero());
+                        holder.contactNourriture.setText("Numero: "+model.getNumero());
                         Picasso.get().load(model.getImage()).resize(500,500 ).into(holder.imageViewNourriture);
 
                         holder.itemView.setOnClickListener(new View.OnClickListener() {

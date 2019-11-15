@@ -30,4 +30,12 @@ public interface Api {
             @Field("numero") String numero,
             @Field("password") String password
     );
+
+    @FormUrlEncoded
+    @POST("renew")
+    Call<LoginResponse> userReenw(
+            @Field("numero") String numero,
+            @Field("password") String password
+
+    );
 }

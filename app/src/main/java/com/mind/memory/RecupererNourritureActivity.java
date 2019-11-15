@@ -52,29 +52,6 @@ public class RecupererNourritureActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-       getNourritureDetails(nourritureId);
     }
 
-    private void getNourritureDetails(String nourritureId) {
-        DatabaseReference nourriturRef = FirebaseDatabase.getInstance().getReference().child("Nourriture");
-
-        nourriturRef.child(nourritureId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists())
-                {
-                    NourritureOffer nourritureOffer = dataSnapshot.getValue(NourritureOffer.class);
-                    nomRecup.setText(nourritureOffer.getDescription());
-                    provenanceRecup.setText(nourritureOffer.getProvenance());
-                    adresseRecup.setText(nourritureOffer.getLieu());
-                    Picasso.get().load(nourritureOffer.getImage()).into(imageRecup);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
 }

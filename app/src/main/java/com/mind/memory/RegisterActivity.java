@@ -257,7 +257,6 @@ public class RegisterActivity extends AppCompatActivity {
                 });
     }
 
-
     private void Clean() {
         registerFirstName.setText("");
         registerName.setText("");

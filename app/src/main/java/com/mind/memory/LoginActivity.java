@@ -1,18 +1,15 @@
 package com.mind.memory;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -21,17 +18,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
 import com.mind.memory.Model.LoginResponse;
-import com.mind.memory.Model.Users;
 import com.mind.memory.Retrof.RetrofitRegister;
 
 import retrofit2.Call;
@@ -44,7 +31,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText phoneLogin,passwordLogin;
     private TextView forgetPassword;
     private ProgressDialog loadingBar;
-    public String sendName,sendFirstName;
     boolean doubleBackToExitPressedOnce = false;
     Toast toast;
 
@@ -160,6 +146,8 @@ public class LoginActivity extends AppCompatActivity {
                     //on test si on a un Donneur on un vendeur
                     if (loginResponse.getProfil().equals("Donneur") || loginResponse.getProfil().equals("Vendeur")){
                         Toast.makeText(LoginActivity.this, "Vendeur ou Donneur", Toast.LENGTH_SHORT).show();
+                        Intent in = new Intent(LoginActivity.this,NewNourritureActivity.class);
+                        startActivity(in);
                     }
                     else{
                         Toast.makeText(LoginActivity.this, "Volontaire", Toast.LENGTH_SHORT).show();

@@ -2,7 +2,10 @@ package com.mind.memory;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -11,9 +14,11 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +27,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -32,57 +41,303 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.gson.annotations.SerializedName;
+import com.koushikdutta.ion.Ion;
+import com.mind.memory.Api.ApiNourritureOffert;
+import com.mind.memory.Model.NourritureOffer;
+import com.mind.memory.Retrof.RetrofitNourritureOffert;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static android.media.MediaRecorder.VideoSource.CAMERA;
+
 public class NewNourritureActivity extends AppCompatActivity {
     private ImageView nouritureImage;
-    private EditText type,provenance,lieu,contact,quantite,jourRestant;
-    private static final int galleryPick=1;
+    EditText type,desc,provenance,lieu,contact,quantite,jourRestant;
     private Button btnValider;
-    private Uri imageUri,targetUri;
-    String typen,provenancen,lieun,quantiten,contactn,saveCurrentDate,saveCurrentTime,jour;
-    int day;
-    private String nourritureRandomKey,dowloadImageUri;
-    private StorageReference nourritureImageRef;
-    private DatabaseReference nourritureRef;
+    Uri targetUri;
+    String typen,provenancen,descn,lieun,quantiten,contactn,saveCurrentDate,saveCurrentTime,jour;
+    Bitmap bitmap;
+    final int PICK_IMAGE_REQUEST = 234;
     private ProgressDialog loadingBar;
+    private int GALLERY = 1, CAMERA = 2;
+
+    /*
+        Nourriture offert class
+    */
+    class NourritureOffert{
+
+        private String typeNourritureOffert;
+        private String descriptionNourritureOffert;
+        private String lieu;
+        private String provenanceNourritureOffert;
+        private String quantiteNourritureOffert;
+        private String numero;
+        private String jourRestant;
+        private String dateAjoutNourritureOffert;
+
+        public NourritureOffert(String typeNourritureOffert, String descriptionNourritureOffert, String lieu, String provenanceNourritureOffert, String quantiteNourritureOffert, String numero) {
+            this.typeNourritureOffert = typeNourritureOffert;
+            this.descriptionNourritureOffert = descriptionNourritureOffert;
+            this.lieu = lieu;
+            this.provenanceNourritureOffert = provenanceNourritureOffert;
+            this.quantiteNourritureOffert = quantiteNourritureOffert;
+            this.numero = numero;
+        }
+
+        public String getTypeNourritureOffert() {
+            return typeNourritureOffert;
+        }
+
+        public String getDescriptionNourritureOffert() {
+            return descriptionNourritureOffert;
+        }
+
+        public String getLieu() {
+            return lieu;
+        }
+
+        public String getProvenanceNourritureOffert() {
+            return provenanceNourritureOffert;
+        }
+
+        public String getQuantiteNourritureOffert() {
+            return quantiteNourritureOffert;
+        }
+
+        public String getNumero() {
+            return numero;
+        }
+
+        public String getJourRestant() {
+            return jourRestant;
+        }
+
+        public String getDateAjoutNourritureOffert() {
+            return dateAjoutNourritureOffert;
+        }
+    }
+
+    /*
+     Upload class
+ */
+    public class Myuploader{
+        private static final String data_upload_url = "http://192.168.43.216/back/public/api/offrirNourriture";
+        private final Context c;
+        public  Myuploader(Context c){this.c = c;}
+
+        public void upload(NourritureOffert s,View...inputView){
+            if (s == null){
+                Toast.makeText(c, "Pas de donnés à enrigistrer", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                File imageFile;
+                try {
+                    imageFile = new File(getImagePath(targetUri));
+
+                }catch (Exception e){
+                    Toast.makeText(c, "Veillez choisir une image", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                //progressBar
+                AndroidNetworking.upload(data_upload_url)
+                            .addMultipartFile("image",imageFile)
+                            .addMultipartParameter("type",s.getTypeNourritureOffert())
+                            .addMultipartParameter("desc",s.getDescriptionNourritureOffert())
+                            .addMultipartParameter("provenance",s.getProvenanceNourritureOffert())
+                            .addMultipartParameter("lieu",s.getLieu())
+                            .addMultipartParameter("quantite",s.getQuantiteNourritureOffert())
+                            .addMultipartParameter("numero",s.getNumero())
+                            .addMultipartParameter("date","date")
+                            .addMultipartParameter("jourRestant","2")
+                            .addMultipartParameter("name","upload")
+                            .setTag("MYSQL_UPLOAD")
+                            .setPriority(Priority.HIGH)
+                            .build()
+                            .getAsJSONObject(new JSONObjectRequestListener() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    if (response != null){
+                                        try {
+                                            //show response from server
+                                            String message = response.get("message").toString();
+                                            Toast.makeText(c, message, Toast.LENGTH_SHORT).show();
+                                            if (message.equalsIgnoreCase("success")){
+                                                Toast.makeText(c, "Bien", Toast.LENGTH_SHORT).show();
+                                            }else {
+                                                Toast.makeText(c, message, Toast.LENGTH_SHORT).show();
+                                            }
+                                        }catch (Exception e){
+                                            Toast.makeText(c, "JsonException", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    }else{
+                                        Toast.makeText(c, "Null response", Toast.LENGTH_SHORT).show();
+                                    }
+                                    //progressBar.dismis()
+                                }
+
+                                @Override
+                                public void onError(ANError anError) {
+                                    //progressBar.dismis()
+                                    Toast.makeText(c, "unsuccessful", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+            }
+        }
+    }
+
+    private void openGallery(){
+        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
+        pictureDialog.setTitle("Select Action");
+        String[] pictureDialogItems = {
+                "Photo Gallery",
+                "Camera" };
+        pictureDialog.setItems(pictureDialogItems,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                choosePhotoFromGallary();
+                                break;
+                            case 1:
+                                takePhotoFromCamera();
+                                break;
+                        }
+                    }
+                });
+        pictureDialog.show();
+    }
+    public void choosePhotoFromGallary() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        startActivityForResult(galleryIntent, GALLERY);
+    }
+
+    private void takePhotoFromCamera() {
+        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, CAMERA);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == this.RESULT_CANCELED) {
+            return;
+        }
+        if (requestCode == GALLERY) {
+            if (data != null) {
+                Uri contentURI = data.getData();
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
+                    // String path = saveImage(bitmap);
+                    targetUri = data.getData();
+                    //Toast.makeText(MainActivity.this, "Image Saved!", Toast.LENGTH_SHORT).show();
+                    nouritureImage.setImageBitmap(bitmap);
 
 
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(NewNourritureActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        } else if (requestCode == CAMERA) {
+            bitmap = (Bitmap) data.getExtras().get("data");
+            targetUri = data.getData();
+            nouritureImage.setImageBitmap(bitmap);
+            //  saveImage(thumbnail);
+            //Toast.makeText(ShadiRegistrationPart5.this, "Image Saved!", Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+    //getImage path
+    public String getImagePath(Uri uri){
+        String [] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(uri,projection,null,null,null);
+        if (cursor == null){
+            return null;
+        }
+        int columnIndex =  cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String s = cursor.getString(columnIndex);
+        cursor.close();
+        return s;
+    }
+     private boolean validateData(){
+        if (type.getText().toString() == null || desc.getText().toString() == null || lieu.getText().toString() == null || provenance.getText().toString() == null || quantite.getText().toString() == null || contact.getText().toString() == null )
+        {
+            return false;
+        }
+         if (type.getText().toString() == "" || desc.getText().toString() == "" || lieu.getText().toString() == "" || provenance.getText().toString() == "" || quantite.getText().toString() == "" || contact.getText().toString() == "" )
+         {
+             return false;
+         }
+         if (targetUri == null){
+            return false;
+         }
+        return  true;
+     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_nourriture);
 
-        nourritureImageRef = FirebaseStorage.getInstance().getReference().child("Images Nourriture");
-        nourritureRef = FirebaseDatabase.getInstance().getReference().child("Nourriture");
-
         loadingBar =  new ProgressDialog(this);
 
         nouritureImage = findViewById(R.id.select_food_pic);
         type = findViewById(R.id.typeAliment);
+        desc = findViewById(R.id.descAliment);
         provenance = findViewById(R.id.provenance);
         lieu = findViewById( R.id.lieu);
         quantite = findViewById(R.id.quantiteNoutiture);
         contact = findViewById(R.id.contactNoutiture);
         jourRestant = findViewById(R.id.jourRestantNourriture);
         btnValider = findViewById(R.id.btnAddNourriture);
-
+        //btnValider.setEnabled(false);
 
         btnValider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ValidateNourritureData();
+                if (validateData()){
+                    typen = type.getText().toString();
+                    descn = desc.getText().toString();
+                    provenancen = provenance.getText().toString();
+                    lieun = lieu.getText().toString();
+                    quantiten = quantite.getText().toString();
+                    contactn = contact.getText().toString();
+                    jour = jourRestant.getText().toString();
+
+                    NourritureOffert nourritureOffert = new NourritureOffert(typen,descn,provenancen,lieun,quantiten,contactn);
+
+                    new Myuploader(NewNourritureActivity.this).upload(nourritureOffert,type,desc,lieu,provenance,contact);
+                }
+                else {
+                    Toast.makeText(NewNourritureActivity.this, "Invalide", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-
 
         nouritureImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,215 +349,6 @@ public class NewNourritureActivity extends AppCompatActivity {
     }
 
 
-    private void openGallery(){
-       CropImage.activity().start(NewNourritureActivity.this);
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-            if (requestCode== CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
-                CropImage.ActivityResult result = CropImage.getActivityResult(data);
-
-                if (resultCode == RESULT_OK){
-                    targetUri = result.getUri();
-                    nouritureImage.setImageURI(targetUri);
-                }
-            }
-
-
-        }
-
-
-    private void ValidateNourritureData() {
-        typen = type.getText().toString();
-        provenancen = provenance.getText().toString();
-        lieun = lieu.getText().toString();
-        quantiten = quantite.getText().toString();
-        contactn = contact.getText().toString();
-        jour = jourRestant.getText().toString();
-
-        if (targetUri == null)
-        {
-            Toast toast = new Toast(getApplicationContext());
-            toast.setGravity(Gravity.CENTER,0,0);
-            TextView tv = new TextView(NewNourritureActivity.this);
-            tv.setBackgroundColor(Color.WHITE);
-            tv.setTextColor(Color.RED);
-            tv.setTextSize(15);
-
-            Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
-            tv.setTypeface(t);
-            tv.setPadding(10,10,10,10);
-            tv.setText("Veillez mettre l'image de la nourriture svp");
-            toast.setView(tv);
-            toast.setDuration(Toast.LENGTH_LONG);
-            toast.show();
-
-        }
-        else if(TextUtils.isEmpty(typen) || TextUtils.isEmpty(jour) || TextUtils.isEmpty(provenancen) || TextUtils.isEmpty(lieun) || TextUtils.isEmpty(contactn) || TextUtils.isEmpty(quantiten))
-        {
-            Toast toast = new Toast(getApplicationContext());
-            toast.setGravity(Gravity.CENTER,0,0);
-            TextView tv = new TextView(NewNourritureActivity.this);
-            tv.setBackgroundColor(Color.WHITE);
-            tv.setTextColor(Color.RED);
-            tv.setTextSize(15);
-
-            Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
-            tv.setTypeface(t);
-            tv.setPadding(10,10,10,10);
-            tv.setText("Tous les champs sont");
-            toast.setView(tv);
-            toast.setDuration(Toast.LENGTH_LONG);
-            toast.show();
-        }
-        else
-        {
-            StorageNouritureInfo();
-        }
-    }
-
-    private void StorageNouritureInfo() {
-        loadingBar.setTitle("Enrigistrement");
-        loadingBar.setMessage("Veillez patienter un instant nous traitons votre demande");
-        loadingBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        loadingBar.setMax(100);
-        loadingBar.getMax();
-        loadingBar.getProgress();
-        loadingBar.incrementProgressBy(2);
-        loadingBar.setCancelable(false);
-        loadingBar.setCanceledOnTouchOutside(false);
-        loadingBar.show();
-
-        Calendar calendar = Calendar.getInstance();
-
-        SimpleDateFormat currentDate = new SimpleDateFormat("MM dd,yyyy");
-        saveCurrentDate = currentDate.format(calendar.getTime());
-
-        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
-        saveCurrentTime = currentTime.format(calendar.getTime());
-
-        day = calendar.get(Calendar.DAY_OF_MONTH);
-
-        nourritureRandomKey = saveCurrentDate + saveCurrentTime;
-
-        final StorageReference filePath = nourritureImageRef.child(targetUri.getLastPathSegment() + nourritureRandomKey + ".jpg");
-        final UploadTask uploadTask = filePath.putFile(targetUri);
-
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                    String message = e.toString();
-                Toast toast = new Toast(getApplicationContext());
-                toast.setGravity(Gravity.CENTER,0,0);
-                TextView tv = new TextView(NewNourritureActivity.this);
-                tv.setBackgroundColor(Color.WHITE);
-                tv.setTextColor(Color.RED);
-                tv.setTextSize(15);
-
-                Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
-                tv.setTypeface(t);
-                tv.setPadding(10,10,10,10);
-                tv.setText(message);
-                toast.setView(tv);
-                toast.setDuration(Toast.LENGTH_LONG);
-                toast.show();
-
-                loadingBar.dismiss();
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                Task<Uri> uriTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                    @Override
-                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                        if (!task.isSuccessful()){
-                            throw task.getException();
-                        }
-
-                        dowloadImageUri = filePath.getDownloadUrl().toString();
-                        return filePath.getDownloadUrl();
-                    }
-                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task) {
-                        if (task.isSuccessful()){
-                            dowloadImageUri = task.getResult().toString();
-                            //Toast.makeText(NewNourritureActivity.this, "getting url success", Toast.LENGTH_SHORT).show();
-
-                            saveNourritureToDatabase();
-                            clear();
-                        }
-                    }
-                });
-            }
-        });
-
-    }
-
-    private void saveNourritureToDatabase() {
-        HashMap<String,Object> nourritureHashmap = new HashMap<>();
-        nourritureHashmap.put("nourritureId",nourritureRandomKey);
-        nourritureHashmap.put("date",saveCurrentDate);
-        nourritureHashmap.put("time",saveCurrentTime);
-        nourritureHashmap.put("description",typen);
-        nourritureHashmap.put("provenance",provenancen);
-        nourritureHashmap.put("lieu",lieun);
-        nourritureHashmap.put("image",dowloadImageUri);
-        nourritureHashmap.put("quantite",quantiten);
-        nourritureHashmap.put("jourRestant",jour+day);
-        nourritureHashmap.put("numero",contactn);
-
-        nourritureRef.child(nourritureRandomKey).updateChildren(nourritureHashmap)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()){
-                            loadingBar.dismiss();
-
-                            Toast toast = new Toast(getApplicationContext());
-                            toast.setGravity(Gravity.CENTER,0,0);
-                            TextView tv = new TextView(NewNourritureActivity.this);
-                            tv.setBackgroundColor(Color.WHITE);
-                            tv.setTextColor(Color.BLUE);
-                            tv.setTextSize(15);
-
-                            Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
-                            tv.setTypeface(t);
-                            tv.setPadding(10,10,10,10);
-                            tv.setText("Nourriture offert avec succes");
-                            toast.setView(tv);
-                            toast.setDuration(Toast.LENGTH_LONG);
-                            toast.show();
-                            //Toast.makeText(NewNourritureActivity.this, "Nourriture offert avec success", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            loadingBar.dismiss();
-
-                            Toast toast = new Toast(getApplicationContext());
-                            toast.setGravity(Gravity.CENTER,0,0);
-                            TextView tv = new TextView(NewNourritureActivity.this);
-                            tv.setBackgroundColor(Color.WHITE);
-                            tv.setTextColor(Color.RED);
-                            tv.setTextSize(15);
-
-                            Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
-                            tv.setTypeface(t);
-                            tv.setPadding(10,10,10,10);
-                            tv.setText("Une erreur est survenue veillez recomencer");
-                            toast.setView(tv);
-                            toast.setDuration(Toast.LENGTH_LONG);
-                            toast.show();
-                           // Toast.makeText(NewNourritureActivity.this, "Erreur de l'ajout de la nourriture", Toast.LENGTH_SHORT).show();
-
-                        }
-                    }
-                });
-    }
 
     private void clear() {
         type.setText("");

@@ -1,102 +1,30 @@
 package com.mind.memory.Model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class NourritureOffer {
-    private String description,lieu,numero,quantite,image,nourritureId,provenance,time,date,jourRestant;
+    @SerializedName("typeNourritureOffert")
+    private String type;
+    @SerializedName("descriptionNourritureOffert")
+    private String descriptionNourritureOffert;
+    @SerializedName("lieuNourritureOffert")
+    private String lieu;
+    @SerializedName("provenanceNourritureOffert")
+    private String provenance;
+    @SerializedName("quantiteNourritureOffer")
+    private  String quantite;
+    @SerializedName("imageNorritureOffert")
+    private String imageNourritureOffert;
+    @SerializedName("numero")
+    private String numero;
+    @SerializedName("jourRestant")
+    private String jourRestant;
+    @SerializedName("dateAjoutNourritureOffert")
+    private String dateAjoutNourritureOffert;
+    @SerializedName("response")
+    private String response;
 
-
-    public NourritureOffer() {
-    }
-
-    public NourritureOffer(String description, String lieu, String numero, String quantite, String image, String nourritureId, String provenance, String jourRestant, String time, String date) {
-        this.description = description;
-        this.lieu = lieu;
-        this.numero = numero;
-        this.quantite = quantite;
-        this.image = image;
-        this.nourritureId = nourritureId;
-        this.provenance = provenance;
-        this.time = time;
-        this.date = date;
-        this.jourRestant = jourRestant;
-    }
-
-    public String getJourRestant() {
-        return jourRestant;
-    }
-
-    public void setJourRestant(String jourRestant) {
-        this.jourRestant = jourRestant;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getLieu() {
-        return lieu;
-    }
-
-    public void setLieu(String lieu) {
-        this.lieu = lieu;
-    }
-
-    public String getNumero() {
-        return numero;
-    }
-
-    public void setNumero(String numero) {
-        this.numero = numero;
-    }
-
-    public String getQuantite() {
-        return quantite;
-    }
-
-    public void setQuantite(String quantite) {
-        this.quantite = quantite;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public String getNourritureId() {
-        return nourritureId;
-    }
-
-    public void setNourritureId(String nourritureId) {
-        this.nourritureId = nourritureId;
-    }
-
-    public String getProvenance() {
-        return provenance;
-    }
-
-    public void setProvenance(String provenance) {
-        this.provenance = provenance;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
+    public String getResponse() {
+        return response;
     }
 }

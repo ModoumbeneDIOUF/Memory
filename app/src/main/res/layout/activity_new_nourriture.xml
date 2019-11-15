@@ -9,7 +9,7 @@
     <ImageView
         android:id="@+id/select_food_pic"
         android:layout_width="350dp"
-        android:layout_height="150dp"
+        android:layout_height="100dp"
         android:cropToPadding="false"
         android:scaleType="center"
         android:layout_centerHorizontal="true"
@@ -24,17 +24,29 @@
         android:inputType="textMultiLine"
         android:layout_marginTop="2dp"
         android:padding="20dp"
-        android:hint="Desciption de la nourriture"
+        android:hint="Type de nourriture"
         android:layout_marginRight="45dp"
         android:layout_marginLeft="45dp"
         android:background="@drawable/input_designe"
-
         />
+    <EditText
+        android:id="@+id/descAliment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/typeAliment"
+        android:inputType="textMultiLine"
+        android:layout_marginTop="2dp"
+        android:padding="20dp"
+        android:hint="Desciption"
+        android:layout_marginRight="45dp"
+        android:layout_marginLeft="45dp"
+        android:background="@drawable/input_designe"/>
+
     <EditText
         android:id="@+id/provenance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/typeAliment"
+        android:layout_below="@id/descAliment"
         android:inputType="textMultiLine"
         android:layout_marginTop="2dp"
         android:padding="20dp"

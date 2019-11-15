@@ -56,68 +56,7 @@ public class NourritureOffertActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onStart() {
 
-        super.onStart();
-
-        NourritureRef.addValueEventListener(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        FirebaseRecyclerOptions<NourritureOffer> options =
-                new FirebaseRecyclerOptions.Builder<NourritureOffer>()
-                        .setQuery(NourritureRef,NourritureOffer.class)
-                        .build();
-
-        FirebaseRecyclerAdapter<NourritureOffer,NorritureOfertViewHolder> adapter =
-                new FirebaseRecyclerAdapter<NourritureOffer, NorritureOfertViewHolder>(options) {
-                    @Override
-                    protected void onBindViewHolder(@NonNull NorritureOfertViewHolder holder, int position, @NonNull final NourritureOffer model) {
-                       calendar = Calendar.getInstance();
-                       int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-                        holder.typeNourriture.setText(" Type de nourriture: "+model.getDescription());
-                        holder.proveNourriture.setText("Provenance: "+model.getProvenance());
-                        holder.adressNourriture.setText("Adresse: "+model.getLieu());
-
-                        holder.jourRestantNou.setText("Jours restant:" +model.getJourRestant());
-
-                        holder.contactNourriture.setText("Numero: "+model.getNumero());
-                        Picasso.get().load(model.getImage()).resize(500,500 ).into(holder.imageViewNourriture);
-
-                        holder.itemView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent intent = new Intent(NourritureOffertActivity.this,RecupererNourritureActivity.class);
-                                intent.putExtra("nourritureId",model.getNourritureId());
-                                startActivity(intent);
-                            }
-                        });
-                    }
-
-                    @NonNull
-                    @Override
-                    public NorritureOfertViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-                        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_nourriture_added,parent,false);
-                        NorritureOfertViewHolder holder = new NorritureOfertViewHolder(view);
-                        return holder;
-                    }
-                };
-
-
-        adapter.startListening();
-        recyclerView.setAdapter(adapter);
-
-    }
 
 
 }

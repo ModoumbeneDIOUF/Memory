@@ -1,7 +1,6 @@
 package com.mind.memory;
 
 import android.app.ProgressDialog;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -10,11 +9,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.mind.memory.Model.LoginResponse;
+import com.mind.memory.Retrof.RetrofitRegister;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class RenewPasswordActivity extends AppCompatActivity {
     private EditText forgetPhone,forgetPassword,forgetPasswordConf;
@@ -64,6 +65,7 @@ public class RenewPasswordActivity extends AppCompatActivity {
             loadingBar.setCancelable(false);
             loadingBar.setCanceledOnTouchOutside(false);
             loadingBar.show();
+
             SaveNewPassword(phone,password);
             Clean();
         }
@@ -71,30 +73,31 @@ public class RenewPasswordActivity extends AppCompatActivity {
 
 
     private void SaveNewPassword(final String phone, final String password) {
-        final DatabaseReference RootRef,ChildRef;
-        RootRef = FirebaseDatabase.getInstance().getReference();
-        ChildRef = FirebaseDatabase.getInstance().getReference("Users").child(phone).child("password");
+        Call<LoginResponse> call = RetrofitRegister
+                                    .getInstance()
+                                    .getApi().userReenw(phone,password);
 
-        RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.child("Users").child(phone).exists()){
-                    loadingBar.dismiss();
-                    ChildRef.setValue(password);
-                    Toast.makeText(RenewPasswordActivity.this, "bien ", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Toast.makeText(RenewPasswordActivity.this, "Compte inexistant ", Toast.LENGTH_SHORT).show();
-                    loadingBar.dismiss();
-                    Toast.makeText(RenewPasswordActivity.this, "Veillez donner le bon numéro", Toast.LENGTH_SHORT).show();
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            call.enqueue(new Callback<LoginResponse>() {
+                @Override
+                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                    LoginResponse loginResponse = response.body();
+                    if (!loginResponse.isError()){
+                        loadingBar.dismiss();
+                        Toast.makeText(RenewPasswordActivity.this, loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        loadingBar.dismiss();
+                        Toast.makeText(RenewPasswordActivity.this, loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
 
-            }
-        });
-    }
+                }
+
+                @Override
+                public void onFailure(Call<LoginResponse> call, Throwable throwable) {
+
+                }
+            });
+           }
 
     private void Clean() {
         forgetPassword.setText("");

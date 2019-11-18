@@ -146,7 +146,7 @@ public class LoginActivity extends AppCompatActivity {
                     //on test si on a un Donneur on un vendeur
                     if (loginResponse.getProfil().equals("Donneur") || loginResponse.getProfil().equals("Vendeur")){
                         Toast.makeText(LoginActivity.this, "Vendeur ou Donneur", Toast.LENGTH_SHORT).show();
-                        Intent in = new Intent(LoginActivity.this,NewNourritureActivity.class);
+                        Intent in = new Intent(LoginActivity.this,NourritureOffertActivity.class);
                         startActivity(in);
                     }
                     else{

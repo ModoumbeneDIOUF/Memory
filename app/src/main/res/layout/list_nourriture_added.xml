@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="300dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardviewListNourriture"
-    app:cardCornerRadius="8dp"
+    app:cardCornerRadius="5dp"
     app:cardUseCompatPadding="true"
+    app:cardElevation="7dp"
     >
 
     <RelativeLayout
@@ -23,11 +24,11 @@
             />
 
         <TextView
-            android:id="@+id/listTypeNourriture"
+            android:id="@+id/listDescNourritureOf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/list_nourriture_pic"
-            android:text="type nourriture"
+            android:text="Desciption"
             android:textAlignment="center"
             android:textSize="18dp"
             android:textColor="@color/colorPrimaryDark"/>
@@ -35,7 +36,7 @@
             android:id="@+id/provenanceNourriture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/listTypeNourriture"
+            android:layout_below="@id/listDescNourritureOf"
             android:text="provenance nourriture"
             android:textAlignment="center"
             android:textSize="18dp"

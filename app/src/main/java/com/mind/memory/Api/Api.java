@@ -2,7 +2,6 @@ package com.mind.memory.Api;
 
 import com.mind.memory.Model.LoginResponse;
 
-import javax.xml.transform.Result;
 
 import retrofit2.Call;
 import retrofit2.http.Field;

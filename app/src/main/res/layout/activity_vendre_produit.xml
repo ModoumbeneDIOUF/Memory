@@ -1,65 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.mind.memory.VendreProduitActivity">
 
 
     <ImageView
         android:id="@+id/vendreImage"
-        android:layout_width="350dp"
+        android:layout_width="396dp"
         android:layout_height="150dp"
-        android:cropToPadding="false"
-        android:scaleType="center"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:src="@mipmap/cam"
-        />
-    <EditText
-        android:id="@+id/vendreQuantite"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/vendreImage"
-        android:inputType="textMultiLine"
-        android:layout_marginTop="20dp"
-        android:padding="20dp"
-        android:hint="Quantite"
-        android:layout_marginRight="45dp"
-        android:layout_marginLeft="45dp"
-        android:background="@drawable/input_designe"
+        android:cropToPadding="false"
+        android:scaleType="center"
+        android:src="@mipmap/cam" />
+     <android.support.design.widget.TextInputLayout
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content">
+         <EditText
+             android:id="@+id/vendreQuantite"
+             android:layout_width="fill_parent"
+             android:layout_height="wrap_content"
+             android:layout_below="@id/vendreImage"
+             android:inputType="textMultiLine"
+             android:hint="Quantite"
+             android:layout_marginRight="45dp"
+             android:layout_marginLeft="45dp"
+             android:singleLine="true"
+             android:imeOptions="actionNext"
+             />
+     </android.support.design.widget.TextInputLayout>
 
-        />
-    <EditText
-        android:id="@+id/vendrePrix"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/vendreQuantite"
-        android:inputType="textMultiLine"
-        android:layout_marginTop="20dp"
-        android:padding="20dp"
-        android:hint="Prix"
-        android:layout_marginRight="45dp"
-        android:layout_marginLeft="45dp"
-        android:background="@drawable/input_designe"
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/vendrePrix"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/vendreQuantite"
+            android:inputType="textMultiLine"
 
-        />
+            android:hint="Prix du produit"
+            android:layout_marginRight="45dp"
+            android:layout_marginLeft="45dp"
+            android:singleLine="true"
+            android:imeOptions="actionNext"
+            />
 
-    <TextView
-        android:id="@+id/vendreExpiration"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/vendrePrix"
-        android:inputType="textMultiLine"
-        android:layout_marginTop="6dp"
-        android:padding="20dp"
-        android:hint="Date d'expiration"
-        android:layout_marginRight="45dp"
-        android:layout_marginLeft="45dp"
-        android:background="@drawable/input_designe"
+    </android.support.design.widget.TextInputLayout>
+   <android.support.design.widget.TextInputLayout
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content">
 
-        />
+       <TextView
+           android:id="@+id/vendreExpiration"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:layout_below="@id/vendrePrix"
+           android:inputType="textMultiLine"
+           android:hint="Date d'expiration"
+           android:layout_marginRight="45dp"
+           android:layout_marginLeft="45dp"
+           android:padding="20dp"
+           />
+   </android.support.design.widget.TextInputLayout>
+
+
     <Button
         android:id="@+id/vendreBtn"
         android:layout_marginTop="20dp"
@@ -77,4 +87,4 @@
         android:textColor="@color/colorWhite" />
 
 
-</RelativeLayout>
+</LinearLayout>

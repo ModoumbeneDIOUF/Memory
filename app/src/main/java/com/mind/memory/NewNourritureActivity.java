@@ -22,6 +22,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.mind.memory.Model.Url;
 
 import org.json.JSONObject;
 
@@ -99,7 +100,7 @@ public class NewNourritureActivity extends AppCompatActivity {
      Upload class
  */
     public class Myuploader{
-        private static final String data_upload_url = "http://192.168.43.216/back/public/api/offrirNourriture";
+        private static final String data_upload_url = "http://10.156.116.112/back/public/api/offrirNourriture";
         private final Context c;
         public  Myuploader(Context c){this.c = c;}
 
@@ -140,9 +141,9 @@ public class NewNourritureActivity extends AppCompatActivity {
                                             String message = response.get("message").toString();
                                             Toast.makeText(c, message, Toast.LENGTH_SHORT).show();
                                             if (message.equalsIgnoreCase("ok")){
-                                                Toast.makeText(c, "Bien", Toast.LENGTH_SHORT).show();
-                                               // Intent intent = new Intent(NewNourritureActivity.this,NourritureOffertActivity.class);
-                                                //startActivity(intent);
+                                                Toast.makeText(c, "Success", Toast.LENGTH_SHORT).show();
+                                                Intent intent = new Intent(NewNourritureActivity.this,NourritureOffertActivity.class);
+                                                startActivity(intent);
                                             }else {
                                                 Toast.makeText(c, message, Toast.LENGTH_SHORT).show();
                                             }

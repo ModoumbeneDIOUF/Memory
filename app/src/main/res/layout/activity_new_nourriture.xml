@@ -1,117 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_vertical"
+    android:paddingTop="1dp"
+    android:paddingBottom="16dp"
+
     tools:context=".NewNourritureActivity">
 
     <ImageView
         android:id="@+id/select_food_pic"
-        android:layout_width="350dp"
-        android:layout_height="100dp"
+        android:layout_width="396dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-20dp"
         android:cropToPadding="false"
         android:scaleType="center"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:src="@mipmap/cam"
-        />
-    <EditText
-        android:id="@+id/typeAliment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/select_food_pic"
-        android:inputType="textMultiLine"
-        android:layout_marginTop="2dp"
-        android:padding="20dp"
-        android:hint="Type de nourriture"
-        android:layout_marginRight="45dp"
-        android:layout_marginLeft="45dp"
-        android:background="@drawable/input_designe"
-        />
-    <EditText
-        android:id="@+id/descAliment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/typeAliment"
-        android:inputType="textMultiLine"
-        android:layout_marginTop="2dp"
-        android:padding="20dp"
-        android:hint="Desciption"
-        android:layout_marginRight="45dp"
-        android:layout_marginLeft="45dp"
-        android:background="@drawable/input_designe"/>
+        android:src="@mipmap/cam" />
 
-    <EditText
-        android:id="@+id/provenance"
-        android:layout_width="match_parent"
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/descAliment"
-        android:inputType="textMultiLine"
-        android:layout_marginTop="2dp"
-        android:padding="20dp"
-        android:hint="Provenance de la nourriture"
-        android:layout_marginRight="45dp"
-        android:layout_marginLeft="45dp"
-        android:background="@drawable/input_designe"
+        >
+        <EditText
+            android:id="@+id/typeAliment"
+            android:singleLine="true"
+            android:imeOptions="actionNext"
+            android:hint="Type de Don"
+            android:inputType="text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            />
+    </android.support.design.widget.TextInputLayout>
 
-        />
-
-    <EditText
-        android:id="@+id/lieu"
-        android:layout_width="match_parent"
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/provenance"
-        android:inputType="textMultiLine"
-        android:layout_marginTop="2dp"
-        android:padding="20dp"
-        android:hint="Votre adresse"
-        android:layout_marginRight="45dp"
-        android:layout_marginLeft="45dp"
-        android:background="@drawable/input_designe"
 
-        />
+        >
+        <EditText
+            android:id="@+id/descAliment"            android:singleLine="true"
+            android:imeOptions="actionNext"
+            android:hint="Description"
+            android:inputType="text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            />
+    </android.support.design.widget.TextInputLayout>
 
-    <EditText
-        android:id="@+id/quantiteNoutiture"
-        android:layout_width="match_parent"
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/lieu"
-        android:inputType="textMultiLine"
-        android:layout_marginTop="2dp"
-        android:padding="20dp"
-        android:hint="Quantite de le nourriture"
-        android:layout_marginRight="45dp"
-        android:layout_marginLeft="45dp"
-        android:background="@drawable/input_designe"/>
-    <EditText
-        android:id="@+id/jourRestantNourriture"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/quantiteNoutiture"
-        android:inputType="number"
-        android:layout_marginTop="2dp"
-        android:padding="20dp"
-        android:hint="Nombre de jour restant"
-        android:layout_marginRight="45dp"
-        android:layout_marginLeft="45dp"
-        android:background="@drawable/input_designe"
 
-        />
-    <EditText
-        android:id="@+id/contactNoutiture"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/jourRestantNourriture"
-        android:inputType="number"
-        android:layout_marginTop="2dp"
-        android:padding="20dp"
-        android:hint="Numero de téléphone"
-        android:layout_marginRight="45dp"
-        android:layout_marginLeft="45dp"
-        android:background="@drawable/input_designe"
+        >
+        <EditText
+            android:id="@+id/provenance"
+            android:imeOptions="actionNext"
+            android:singleLine="true"
+            android:hint="Provenance"
+            android:inputType="text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
 
-        />
+            />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+
+        >
+        <EditText
+            android:id="@+id/lieu"
+            android:hint="Votre adresse"
+            android:inputType="text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:imeOptions="actionNext"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+
+        >
+        <EditText
+            android:id="@+id/quantiteNoutiture"
+            android:hint="Quantité"
+            android:inputType="text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:imeOptions="actionNext"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+
+        >
+        <EditText
+            android:id="@+id/jourRestantNourriture"
+            android:hint="Nombre de jour restant"
+            android:inputType="text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:imeOptions="actionNext"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+
+        >
+        <EditText
+            android:id="@+id/contactNoutiture"
+            android:hint="Numero de téléphone"
+            android:inputType="text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:imeOptions="actionDone"
+            />
+    </android.support.design.widget.TextInputLayout>
+
     <Button
         android:id="@+id/btnAddNourriture"
         android:layout_marginTop="10dp"
@@ -128,4 +148,5 @@
         android:layout_marginRight="40dp"
         android:textColor="@color/colorWhite" />
 
-</RelativeLayout>
+
+</LinearLayout>

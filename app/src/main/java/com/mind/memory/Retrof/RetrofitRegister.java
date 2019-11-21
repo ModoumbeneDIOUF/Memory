@@ -1,12 +1,13 @@
 package com.mind.memory.Retrof;
 
 import com.mind.memory.Api.Api;
+import com.mind.memory.Model.Url;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitRegister {
-    private static final String BASE_URL = "http://192.168.43.216/back/public/api/";
+    private static final String BASE_URL = Url.url;
     private static RetrofitRegister mInstance;
     private Retrofit retrofit;
 

@@ -100,7 +100,6 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
-
             }
         });
             btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -131,23 +130,34 @@ public class RegisterActivity extends AppCompatActivity {
          password = registerPassword.getText().toString();
          confirm = registerPasswordConfirm.getText().toString();
 
-        if (TextUtils.isEmpty(prenom)|| TextUtils.isEmpty(nom) || TextUtils.isEmpty(adresse) || TextUtils.isEmpty(phone) ||TextUtils.isEmpty(password) ||TextUtils.isEmpty(confirm)){
-            Toast toast = new Toast(getApplicationContext());
-            toast.setGravity(Gravity.CENTER,0,0);
-            TextView tv = new TextView(RegisterActivity.this);
-            tv.setBackgroundColor(Color.WHITE);
-            tv.setTextColor(Color.RED);
-            tv.setTextSize(15);
+        if (TextUtils.isEmpty(prenom)){
 
-            Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
-            tv.setTypeface(t);
-            tv.setPadding(10,10,10,10);
-            tv.setText("Tous les champs sont requis");
-            toast.setView(tv);
-            toast.setDuration(Toast.LENGTH_LONG);
-            toast.show();
+            registerFirstName.setError("requis");
+            Toast.makeText(this, "Tous les champs sont requis", Toast.LENGTH_LONG).show();
 
-            //Toast.makeText(this, "Veillez remplire tous les champs svp!", Toast.LENGTH_SHORT).show();
+        }
+        else if(TextUtils.isEmpty(nom)){
+            registerName.setError("requis");
+            Toast.makeText(this, "Tous les champs sont requis", Toast.LENGTH_LONG).show();
+
+        }
+        else if( TextUtils.isEmpty(adresse)){
+            registerAdress.setError("requis");
+            Toast.makeText(this, "Tous les champs sont requis", Toast.LENGTH_LONG).show();
+
+        }
+        else if( TextUtils.isEmpty(phone)){
+            registerPhone.setError("requis");
+            Toast.makeText(this, "Tous les champs sont requis", Toast.LENGTH_LONG).show();
+
+        }
+        else if (TextUtils.isEmpty(password)){
+            registerPassword.setError("requis");
+            Toast.makeText(this, "Tous les champs sont requis", Toast.LENGTH_LONG).show();
+        }
+        else if( TextUtils.isEmpty(confirm)){
+            registerPasswordConfirm.setError("requis");
+            Toast.makeText(this, "Tous les champs sont requis", Toast.LENGTH_LONG).show();
         }
         else if(!(password.equals(confirm))){
             Toast toast = new Toast(getApplicationContext());
@@ -165,7 +175,6 @@ public class RegisterActivity extends AppCompatActivity {
             toast.setDuration(Toast.LENGTH_LONG);
             toast.show();
 
-           // Toast.makeText(this, "Les deux mots de passe ne pas sont pas les même", Toast.LENGTH_SHORT).show();
         }
         else if (profil.equals("vide")){
             Toast toast = new Toast(getApplicationContext());

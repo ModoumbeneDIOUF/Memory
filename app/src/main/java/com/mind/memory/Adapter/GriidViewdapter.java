@@ -1,6 +1,7 @@
 package com.mind.memory.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,14 +44,15 @@ public class GriidViewdapter extends BaseAdapter {
 
         final ListNourritureOffert listNourritureOffert = (ListNourritureOffert)this.getItem(i);
 
-        descriptionOffert.setText(listNourritureOffert.getDes());
-        provenanceOffert.setText(listNourritureOffert.getPro());
-        adresseNourritureOffert.setText(listNourritureOffert.getAdr());
-        numeroOffert.setText(listNourritureOffert.getNum());
-        jourRestantOffert.setText(listNourritureOffert.getJj());
+        descriptionOffert.setText("Libellé: "+listNourritureOffert.getDes());
+        provenanceOffert.setText("Provenance: "+listNourritureOffert.getPro());
+        adresseNourritureOffert.setText("Adresse: "+listNourritureOffert.getAdr());
+        numeroOffert.setText("Numéro :" +listNourritureOffert.getNum());
+        jourRestantOffert.setText("Jour restant: "+listNourritureOffert.getJj());
 
         if (listNourritureOffert.getImg() != null && listNourritureOffert.getImg().length() > 0){
             Picasso.get().load(listNourritureOffert.getImg()).into(imageOffert);
+          //  Picasso.get().load(listNourritureOffert.getImg()).placeholder(R.drawable.load1).into(imageOffert);
 
         }
         else {

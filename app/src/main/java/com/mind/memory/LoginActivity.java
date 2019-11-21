@@ -96,25 +96,17 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void LoginUser() {
-        Toast toast = new Toast(getApplicationContext());
-        toast.setGravity(Gravity.CENTER,0,0);
-        TextView tv = new TextView(LoginActivity.this);
-        tv.setBackgroundColor(Color.WHITE);
-        tv.setTextColor(Color.RED);
-        tv.setTextSize(15);
-
-        Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
-        tv.setTypeface(t);
-        tv.setPadding(10,10,10,10);
-        tv.setText("Tous les champs sont requis");
-        toast.setView(tv);
-        toast.setDuration(Toast.LENGTH_LONG);
 
         String phone = phoneLogin.getText().toString();
         String password = passwordLogin.getText().toString();
-        if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(password)){
+        if (TextUtils.isEmpty(phone)){
 
-            toast.show();
+           phoneLogin.setError("requis");
+
+            Toast.makeText(this, "Veillez remplir tous les champs", Toast.LENGTH_LONG).show();
+        }
+        else if(TextUtils.isEmpty(password)){
+            passwordLogin.setError("requis");
         }
         else {
             loadingBar.setTitle("Connection");
@@ -146,15 +138,15 @@ public class LoginActivity extends AppCompatActivity {
                     //on test si on a un Donneur on un vendeur
                     if (loginResponse.getProfil().equals("Donneur") || loginResponse.getProfil().equals("Vendeur")){
                         Toast.makeText(LoginActivity.this, "Vendeur ou Donneur", Toast.LENGTH_SHORT).show();
-                        Intent in = new Intent(LoginActivity.this,NourritureOffertActivity.class);
+                        Intent in = new Intent(LoginActivity.this,NewNourritureActivity.class);
                         startActivity(in);
                     }
                     else{
-                        Toast.makeText(LoginActivity.this, "Volontaire", Toast.LENGTH_SHORT).show();
-                    }
+                        Intent in = new Intent(LoginActivity.this,NourritureOffertActivity.class);
+                        startActivity(in);                    }
 
                 }else {
-                    Toast.makeText(LoginActivity.this, loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, loginResponse.getMessage()+":Login et/ou mot de passe incorrect", Toast.LENGTH_LONG).show();
                 }
             }
 

@@ -18,11 +18,12 @@ import android.widget.Toast;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private Button btnOffrire,btnVendre,btndispo,btnAcheter;
+    private Button btnOffrire,btnVendre;
      String prenom,nom;
     private TextView user;
     boolean doubleBackToExitPressedOnce = false;
     Toast toast;
+
 
 
 
@@ -33,14 +34,13 @@ public class HomeActivity extends AppCompatActivity
 
         btnOffrire = findViewById(R.id.main_btn_newNourriture);
         btnVendre = findViewById(R.id.main_btn_vendreProduit);
-        btndispo = findViewById(R.id.main_btn_nourritureDispo);
-        btnAcheter = findViewById(R.id.main_btn_acheterProduit);
         user = findViewById(R.id.userName_profile);
 
         Intent donnees = getIntent();
         nom = donnees.getStringExtra("nom");
         prenom = donnees.getStringExtra("prenom");
 
+        Toast.makeText(this,"Bienvenue "+prenom+" "+nom, Toast.LENGTH_LONG).show();
         //On gére les actions des buttons ici
 
         btnOffrire.setOnClickListener(new View.OnClickListener() {
@@ -59,21 +59,6 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
-        btndispo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent =  new Intent(HomeActivity.this,NourritureOffertActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        btnAcheter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent =  new Intent(HomeActivity.this,ProduitVenduActivity.class);
-                startActivity(intent);
-            }
-        });
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

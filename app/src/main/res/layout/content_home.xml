@@ -55,7 +55,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="135dp"
                         android:layout_marginBottom="10dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:layout_marginTop="50dp">
 
                         <android.support.v7.widget.CardView
                             android:layout_width="0dp"
@@ -83,8 +84,8 @@
                                     android:layout_centerInParent="true"
                                     android:layout_marginTop="0dp"
                                     android:layout_marginBottom="10dp"
-                                    android:text="Offrir nourriture"
-                                    android:textSize="16sp" />
+                                    android:text="Offrir un don"
+                                    android:textSize="20sp" />
 
                                 <Button
                                     android:id="@+id/main_btn_newNourriture"
@@ -123,7 +124,8 @@
                                     android:layout_marginTop="0dp"
                                     android:layout_marginBottom="10dp"
                                     android:text="Vendre un produit"
-                                    android:textSize="16sp" />
+
+                                    android:textSize="20sp" />
 
                                 <Button
                                     android:id="@+id/main_btn_vendreProduit"
@@ -142,101 +144,10 @@
 
                 //debut deux
 
-                <LinearLayout
-                    android:id="@+id/layout2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/layout1"
-                    android:layout_marginTop="15dp">
-
-                    <android.support.v7.widget.CardView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:id="@+id/imageVendre_main"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:layout_centerInParent="true"
-                                android:src="@mipmap/nouriture_dispo" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_below="@id/imageVendre_main"
-                                android:layout_centerInParent="true"
-                                android:layout_marginTop="0dp"
-                                android:layout_marginBottom="10dp"
-                                android:text="Nourriture disponible"
-                                android:textSize="16sp" />
-
-                            <Button
-                                android:id="@+id/main_btn_nourritureDispo"
-                                android:layout_width="match_parent"
-                                android:layout_height="120dp"
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginRight="5dp"
-                                android:background="@android:color/transparent" />
-                        </RelativeLayout>
-
-
-                    </android.support.v7.widget.CardView>
-
-                    <android.support.v7.widget.CardView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-
-                        android:orientation="vertical">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:id="@+id/imageAutre_main"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:layout_centerInParent="true"
-                                android:src="@mipmap/panier_main" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_below="@id/imageAutre_main"
-                                android:layout_centerInParent="true"
-                                android:layout_marginTop="0dp"
-                                android:layout_marginBottom="10dp"
-                                android:text="Acheter un produit"
-                                android:textSize="16sp" />
-
-                            <Button
-                                android:id="@+id/main_btn_acheterProduit"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginRight="6dp"
-                                android:background="@android:color/transparent" />
-                        </RelativeLayout>
-
-
-                    </android.support.v7.widget.CardView>
-
-                </LinearLayout>
 
             </RelativeLayout>
             <LinearLayout
+                android:layout_marginTop="60dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/relive1">

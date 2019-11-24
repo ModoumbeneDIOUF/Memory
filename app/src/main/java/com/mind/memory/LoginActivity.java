@@ -137,8 +137,10 @@ public class LoginActivity extends AppCompatActivity {
                 if (!loginResponse.isError()){
                     //on test si on a un Donneur on un vendeur
                     if (loginResponse.getProfil().equals("Donneur") || loginResponse.getProfil().equals("Vendeur")){
-                        Toast.makeText(LoginActivity.this, "Vendeur ou Donneur", Toast.LENGTH_SHORT).show();
-                        Intent in = new Intent(LoginActivity.this,NewNourritureActivity.class);
+                        //Toast.makeText(LoginActivity.this, "Vendeur ou Donneur", Toast.LENGTH_SHORT).show();
+                        Intent in = new Intent(LoginActivity.this,HomeActivity.class);
+                        in.putExtra("prenom",loginResponse.getPrenom());
+                        in.putExtra("nom",loginResponse.getNom());
                         startActivity(in);
                     }
                     else{

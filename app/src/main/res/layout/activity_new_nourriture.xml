@@ -13,7 +13,7 @@
 
     <ImageView
         android:id="@+id/select_food_pic"
-        android:layout_width="396dp"
+        android:layout_width="380dp"
         android:layout_height="150dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="-20dp"
@@ -25,15 +25,19 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         >
-        <EditText
+
+        <Spinner
             android:id="@+id/typeAliment"
-            android:singleLine="true"
-            android:imeOptions="actionNext"
-            android:hint="Type de Don"
-            android:inputType="text"
-            android:layout_width="fill_parent"
+            style="@style/Material.Widget.Spinner"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:padding="10dp"
+            android:layout_marginStart="0dp"
+            android:textColor="@color/colorPurple"
+            app:rd_style="@style/Material.Drawable.Ripple.Wave"
+            android:layout_marginLeft="0dp">
+
+        </Spinner>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -124,7 +128,7 @@
         <EditText
             android:id="@+id/contactNoutiture"
             android:hint="Numero de téléphone"
-            android:inputType="text"
+            android:inputType="number"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"

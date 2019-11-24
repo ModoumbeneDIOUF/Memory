@@ -83,25 +83,25 @@ public class RegisterActivity extends AppCompatActivity {
         ArrayAdapter<String> dataProfil;
         dataProfil = new ArrayAdapter(this,android.R.layout.simple_spinner_item,profil);
         dataProfil.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(dataProfil);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            spinner.setAdapter(dataProfil);
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                if (parent.getItemAtPosition(position).equals("Choisir un Profil")){
-                    profilChoisit = "vide";
+                    if (parent.getItemAtPosition(position).equals("Choisir un Profil")){
+                        profilChoisit = "vide";
+
+                    }
+                    else {
+                        profilChoisit = parent.getItemAtPosition(position).toString();
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
                 }
-                else {
-                    profilChoisit = parent.getItemAtPosition(position).toString();
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+            });
             btnRegister.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

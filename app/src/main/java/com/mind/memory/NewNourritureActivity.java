@@ -335,7 +335,6 @@ public class NewNourritureActivity extends AppCompatActivity {
                 SimpleDateFormat currentDate = new SimpleDateFormat("MM dd yyyy");
                 dateAjout = currentDate.format(calendar.getTime());
 
-
                 if ( descn.equals("") ||provenancen.equals("") ||lieun.equals("") || quantiten.equals("")||contactn.equals("") || jour.equals(""))
                 {
                    desc.setError("requis");provenance.setError("requis"); lieu.setError("requis");
@@ -350,6 +349,12 @@ public class NewNourritureActivity extends AppCompatActivity {
                     Toast.makeText(NewNourritureActivity.this, "Précisez le type de don", Toast.LENGTH_LONG).show();
                 }
                 else {
+                    provenance.setText("");
+                    desc.setText("");
+                    lieu.setText("");
+                    quantite.setText("");
+                    contact.setText("");
+                    jourRestant.setText("");
                     NourritureOffert nourritureOffert = new NourritureOffert(typen,descn,provenancen,lieun,quantiten,contactn,jour,dateAjout);
 
                     new Myuploader(NewNourritureActivity.this).upload(nourritureOffert,type,desc,lieu,provenance,contact);

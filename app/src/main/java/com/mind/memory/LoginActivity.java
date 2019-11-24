@@ -144,7 +144,7 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(in);
                     }
                     else{
-                        Intent in = new Intent(LoginActivity.this,NourritureOffertActivity.class);
+                        Intent in = new Intent(LoginActivity.this,HomeVolontaireActivity.class);
                         startActivity(in);                    }
 
                 }else {

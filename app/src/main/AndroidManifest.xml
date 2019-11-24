@@ -51,7 +51,8 @@
         <activity android:name=".ResponsableActivity" />
         <activity android:name=".AdminOffertActivity" />
         <activity android:name=".AdminProduitVenduActivity" />
-        <activity android:name=".ListUtilisateur"></activity>
+        <activity android:name=".ListUtilisateur" />
+        <activity android:name=".HomeVolontaireActivity"></activity>
     </application>
 
 </manifest>

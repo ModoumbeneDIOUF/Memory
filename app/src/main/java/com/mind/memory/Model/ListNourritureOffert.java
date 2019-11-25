@@ -2,7 +2,7 @@ package com.mind.memory.Model;
 
 
 public class ListNourritureOffert{
-    private int id;
+    private String id;
     private String des;
     private String type;
     private String pro;
@@ -12,13 +12,14 @@ public class ListNourritureOffert{
     private String img;
     private String jj;
 
-    public ListNourritureOffert(String des, String pro, String adr, String num,String img,String jj) {
+    public ListNourritureOffert(String id,String des, String pro, String adr, String num,String img,String jj) {
         this.des = des;
         this.pro = pro;
         this.adr = adr;
         this.num = num;
         this.img = img;
         this.jj = jj;
+        this.id = id;
     }
 
     public String getDes() {
@@ -45,6 +46,9 @@ public class ListNourritureOffert{
         return jj;
     }
 
+    public String getId() {
+        return id;
+    }
 
 
 }

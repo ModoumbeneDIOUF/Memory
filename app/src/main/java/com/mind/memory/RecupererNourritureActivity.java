@@ -7,11 +7,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class RecupererNourritureActivity extends AppCompatActivity {
     private ImageView imageRecup;
     private TextView nomRecup,adresseRecup,jourRestantRecup,provenanceRecup;
-    private String nourritureId;
+    private String donId;
     private Button btnRecupe,btnCancelRecup;
 
     @Override
@@ -19,8 +20,8 @@ public class RecupererNourritureActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recuperer_nourriture);
 
-        nourritureId = getIntent().getStringExtra("nourritureId");
-
+        Intent intent = getIntent();
+        donId = intent.getStringExtra("id");
         imageRecup = findViewById(R.id.imageRecueperer);
         nomRecup = findViewById(R.id.typeRecuperer);
         adresseRecup = findViewById(R.id.adresseRecupere);
@@ -28,6 +29,8 @@ public class RecupererNourritureActivity extends AppCompatActivity {
         jourRestantRecup = findViewById(R.id.tempsRestantRecuperer);
         btnRecupe = findViewById(R.id.btn_recup);
         btnCancelRecup = findViewById(R.id.btn_cancel_recup);
+
+        Toast.makeText(this, donId, Toast.LENGTH_SHORT).show();
 
         btnCancelRecup.setOnClickListener(new View.OnClickListener() {
             @Override

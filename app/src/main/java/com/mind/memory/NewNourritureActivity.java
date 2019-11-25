@@ -302,7 +302,7 @@ public class NewNourritureActivity extends AppCompatActivity {
                     typeChoist = parent.getItemAtPosition(position).toString();
                     if (typeChoist.equals("Vêtements ou chessures")|| typeChoist.equals("Argent")){
                         jourRestant.setEnabled(false);
-                        jourRestant.setText("0");
+                        jourRestant.setText("Illimité");
                     }
                     else {
                         jourRestant.setEnabled(true);

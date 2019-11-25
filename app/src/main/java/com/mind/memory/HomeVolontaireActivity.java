@@ -1,5 +1,6 @@
 package com.mind.memory;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -23,34 +24,45 @@ public class HomeVolontaireActivity extends AppCompatActivity {
         cardViewrepas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(HomeVolontaireActivity.this, "Repas", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(HomeVolontaireActivity.this,NourritureOffertActivity.class);
+                intent.putExtra("typeDon","Plats");
+                startActivity(intent);
             }
         });
         cardViewFruitLegume.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(HomeVolontaireActivity.this, "Fruits et legumes", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(HomeVolontaireActivity.this,NourritureOffertActivity.class);
+                intent.putExtra("typeDon","Fruits ou légumes");
+                startActivity(intent);
+
             }
         });
 
         cardViewCereale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(HomeVolontaireActivity.this, "Cereale", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(HomeVolontaireActivity.this,NourritureOffertActivity.class);
+                intent.putExtra("typeDon","Céréales");
+                startActivity(intent);
             }
         });
 
         cardViewVtmChess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(HomeVolontaireActivity.this, "Vetement chessures", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(HomeVolontaireActivity.this,NourritureOffertActivity.class);
+                intent.putExtra("typeDon","Vêtements ou chessures");
+                startActivity(intent);
             }
         });
 
         cardViewArgent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(HomeVolontaireActivity.this, "Argent", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(HomeVolontaireActivity.this,NourritureOffertActivity.class);
+                intent.putExtra("typeDon","Argent");
+                startActivity(intent);
             }
         });
     }

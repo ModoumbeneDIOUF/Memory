@@ -42,7 +42,7 @@ public class NewNourritureActivity extends AppCompatActivity {
     Spinner type;
     private Button btnValider;
     Uri targetUri;
-    String typen,typeChoist,provenancen,descn,lieun,quantiten,contactn,dateAjout,jour;
+    String typen,typeChoist,provenancen,descn,lieun,quantiten,contactn,dateAjout,jour,randomLey,timeAjout;
     Bitmap bitmap;
     final int PICK_IMAGE_REQUEST = 234;
     private ProgressDialog loadingBar;
@@ -61,8 +61,10 @@ public class NewNourritureActivity extends AppCompatActivity {
         private String numero;
         private String jourRestant;
         private String dateAjoutNourritureOffert;
+        private String donRandomKey;
 
-        public NourritureOffert(String typeNourritureOffert, String descriptionNourritureOffert, String provenanceNourritureOffert, String lieu, String quantiteNourritureOffert, String numero,String jourRestant,String dateAjoutNourritureOffert) {
+
+        public NourritureOffert(String donRandomKey,String typeNourritureOffert, String descriptionNourritureOffert, String provenanceNourritureOffert, String lieu, String quantiteNourritureOffert, String numero,String jourRestant,String dateAjoutNourritureOffert) {
             this.typeNourritureOffert = typeNourritureOffert;
             this.descriptionNourritureOffert = descriptionNourritureOffert;
             this.lieu = lieu;
@@ -71,6 +73,11 @@ public class NewNourritureActivity extends AppCompatActivity {
             this.numero = numero;
             this.jourRestant = jourRestant;
             this.dateAjoutNourritureOffert = dateAjoutNourritureOffert;
+            this.donRandomKey = donRandomKey;
+        }
+
+        public String getDonRandomKey() {
+            return donRandomKey;
         }
 
         public String getTypeNourritureOffert() {
@@ -137,6 +144,7 @@ public class NewNourritureActivity extends AppCompatActivity {
                         .addMultipartParameter("quantite",s.getQuantiteNourritureOffert())
                         .addMultipartParameter("numero",s.getNumero())
                         .addMultipartParameter("date",s.getDateAjoutNourritureOffert())
+                        .addMultipartParameter("donRandomKey",s.getDonRandomKey())
                         .addMultipartParameter("jourRestant",s.getJourRestant())
                         .addMultipartParameter("name","upload")
                         .setTag("MYSQL_UPLOAD")
@@ -302,12 +310,11 @@ public class NewNourritureActivity extends AppCompatActivity {
                     typeChoist = parent.getItemAtPosition(position).toString();
                     if (typeChoist.equals("Vêtements ou chessures")|| typeChoist.equals("Argent")){
                         jourRestant.setEnabled(false);
-                        jourRestant.setText("Illimité");
+                        jourRestant.setText("illimite");
                     }
                     else {
                         jourRestant.setEnabled(true);
                     }
-
                 }
             }
 
@@ -335,9 +342,13 @@ public class NewNourritureActivity extends AppCompatActivity {
                 SimpleDateFormat currentDate = new SimpleDateFormat("MM dd yyyy");
                 dateAjout = currentDate.format(calendar.getTime());
 
+                SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
+                timeAjout = currentTime.format(calendar.getTime());
+
+                randomLey = dateAjout + timeAjout;
                 if ( descn.equals("") ||provenancen.equals("") ||lieun.equals("") || quantiten.equals("")||contactn.equals("") || jour.equals(""))
                 {
-                   desc.setError("requis");provenance.setError("requis"); lieu.setError("requis");
+                    desc.setError("requis");provenance.setError("requis"); lieu.setError("requis");
                     quantite.setError("requis");contact.setError("requis");jourRestant.setError("requis");
                     Toast.makeText(NewNourritureActivity.this, "Veillez remplir tous les champs", Toast.LENGTH_LONG).show();
                 }
@@ -355,7 +366,7 @@ public class NewNourritureActivity extends AppCompatActivity {
                     quantite.setText("");
                     contact.setText("");
                     jourRestant.setText("");
-                    NourritureOffert nourritureOffert = new NourritureOffert(typen,descn,provenancen,lieun,quantiten,contactn,jour,dateAjout);
+                    NourritureOffert nourritureOffert = new NourritureOffert(randomLey,typen,descn,provenancen,lieun,quantiten,contactn,jour,dateAjout);
 
                     new Myuploader(NewNourritureActivity.this).upload(nourritureOffert,type,desc,lieu,provenance,contact);
 

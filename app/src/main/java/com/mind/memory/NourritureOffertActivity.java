@@ -83,7 +83,7 @@ public class NourritureOffertActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(NourritureOffertActivity.this,RecupererNourritureActivity.class);
-                    intent.putExtra("id",listNourritureOffert.getId());
+                    intent.putExtra("randomKey",listNourritureOffert.getRanomKey());
                     startActivity(intent);
                   //  Toast.makeText(c, listNourritureOffert.getImg(), Toast.LENGTH_SHORT).show();
                 }
@@ -118,7 +118,7 @@ public class NourritureOffertActivity extends AppCompatActivity {
                             try {
                                 for (int i=0;i<response.length();i++){
                                     jo = response.getJSONObject(i);
-                                    String id = jo.getString("id");
+                                    String rand = jo.getString("donRandomKey");
                                     String d = jo.getString("descriptionNourritureOffert");
                                     String p = jo.getString("provenanceNourritureOffert");
                                     String l = jo.getString("lieuNourritureOffert");
@@ -127,7 +127,7 @@ public class NourritureOffertActivity extends AppCompatActivity {
                                     String imgUrl = jo.getString("imageNourritureOffert");
                                     String j = jo.getString("jourRestant");
 
-                                    ofe = new ListNourritureOffert(id,d,p,l,n,Url.uri+"back/public/images/nourritureOffert/"+imgUrl,j);
+                                    ofe = new ListNourritureOffert(rand,d,p,l,n,Url.uri+"back/public/images/nourritureOffert/"+imgUrl,j);
                                     offres.add(ofe);
                                 }
                                 adapter = new GriidViewdapter(c,offres);

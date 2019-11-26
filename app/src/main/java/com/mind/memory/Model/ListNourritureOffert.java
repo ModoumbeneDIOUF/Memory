@@ -11,15 +11,17 @@ public class ListNourritureOffert{
     private String num;
     private String img;
     private String jj;
+    private String donRandomKey;
 
-    public ListNourritureOffert(String id,String des, String pro, String adr, String num,String img,String jj) {
+    public ListNourritureOffert(String donRandomKey,String des, String pro, String adr, String num,String img,String jj) {
         this.des = des;
         this.pro = pro;
         this.adr = adr;
         this.num = num;
         this.img = img;
         this.jj = jj;
-        this.id = id;
+
+        this.donRandomKey = donRandomKey;
     }
 
     public String getDes() {
@@ -50,5 +52,7 @@ public class ListNourritureOffert{
         return id;
     }
 
-
+    public String getRanomKey() {
+        return donRandomKey;
+    }
 }

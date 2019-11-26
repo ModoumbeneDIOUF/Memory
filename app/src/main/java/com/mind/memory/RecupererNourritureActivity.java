@@ -12,7 +12,7 @@ import android.widget.Toast;
 public class RecupererNourritureActivity extends AppCompatActivity {
     private ImageView imageRecup;
     private TextView nomRecup,adresseRecup,jourRestantRecup,provenanceRecup;
-    private String donId;
+    private String randomKey;
     private Button btnRecupe,btnCancelRecup;
 
     @Override
@@ -21,7 +21,7 @@ public class RecupererNourritureActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recuperer_nourriture);
 
         Intent intent = getIntent();
-        donId = intent.getStringExtra("id");
+        randomKey = intent.getStringExtra("randomKey");
         imageRecup = findViewById(R.id.imageRecueperer);
         nomRecup = findViewById(R.id.typeRecuperer);
         adresseRecup = findViewById(R.id.adresseRecupere);
@@ -30,7 +30,7 @@ public class RecupererNourritureActivity extends AppCompatActivity {
         btnRecupe = findViewById(R.id.btn_recup);
         btnCancelRecup = findViewById(R.id.btn_cancel_recup);
 
-        Toast.makeText(this, donId, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, randomKey, Toast.LENGTH_SHORT).show();
 
         btnCancelRecup.setOnClickListener(new View.OnClickListener() {
             @Override

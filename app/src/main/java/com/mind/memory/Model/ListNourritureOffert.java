@@ -23,6 +23,14 @@ public class ListNourritureOffert{
 
         this.donRandomKey = donRandomKey;
     }
+    public ListNourritureOffert(String des,String pro,String adr,String num,String jj,String img){
+        this.des = des;
+        this.pro = pro;
+        this.adr = adr;
+        this.num = num;
+        this.img = img;
+        this.jj = jj;
+    }
 
     public String getDes() {
         return des;

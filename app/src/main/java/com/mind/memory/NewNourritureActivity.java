@@ -188,10 +188,10 @@ public class NewNourritureActivity extends AppCompatActivity {
 
     private void openGallery(){
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
-        pictureDialog.setTitle("Selectionnez une action");
+        pictureDialog.setTitle("Choisir une photo");
         String[] pictureDialogItems = {
                 "Photo Gallery",
-                "Camera" };
+                 };
         pictureDialog.setItems(pictureDialogItems,
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -200,9 +200,7 @@ public class NewNourritureActivity extends AppCompatActivity {
                             case 0:
                                 choosePhotoFromGallary();
                                 break;
-                            case 1:
-                                takePhotoFromCamera();
-                                break;
+
                         }
                     }
                 });
@@ -213,11 +211,6 @@ public class NewNourritureActivity extends AppCompatActivity {
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
         startActivityForResult(galleryIntent, GALLERY);
-    }
-
-    private void takePhotoFromCamera() {
-        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, CAMERA);
     }
 
     @Override
@@ -244,16 +237,11 @@ public class NewNourritureActivity extends AppCompatActivity {
                 }
             }
 
-        } else if (requestCode == CAMERA) {
-            bitmap = (Bitmap) data.getExtras().get("data");
-            targetUri = data.getData();
-            nouritureImage.setImageBitmap(bitmap);
-            //  saveImage(thumbnail);
-            //Toast.makeText(ShadiRegistrationPart5.this, "Image Saved!", Toast.LENGTH_SHORT).show();
+        }
+
         }
 
 
-    }
 
     //getImage path
     public String getImagePath(Uri uri){
@@ -274,7 +262,6 @@ public class NewNourritureActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_nourriture);
-
         loadingBar =  new ProgressDialog(this);
 
         nouritureImage = findViewById(R.id.select_food_pic);
@@ -360,12 +347,8 @@ public class NewNourritureActivity extends AppCompatActivity {
                     Toast.makeText(NewNourritureActivity.this, "Précisez le type de don", Toast.LENGTH_LONG).show();
                 }
                 else {
-                    provenance.setText("");
-                    desc.setText("");
-                    lieu.setText("");
-                    quantite.setText("");
-                    contact.setText("");
-                    jourRestant.setText("");
+                    clear();
+
                     NourritureOffert nourritureOffert = new NourritureOffert(randomLey,typen,descn,provenancen,lieun,quantiten,contactn,jour,dateAjout);
 
                     new Myuploader(NewNourritureActivity.this).upload(nourritureOffert,type,desc,lieu,provenance,contact);
@@ -388,6 +371,7 @@ public class NewNourritureActivity extends AppCompatActivity {
 
 
     private void clear() {
+        desc.setText("");
         provenance.setText("");
         quantite.setText("");
         lieu.setText("");

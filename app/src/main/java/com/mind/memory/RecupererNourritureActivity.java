@@ -91,6 +91,7 @@ public class RecupererNourritureActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     //Toast.makeText(c, "Cancel", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(RecupererNourritureActivity.this,NourritureOffertActivity.class);
+                    intent.putExtra("typeDon",listNourritureOffert.getType());
                     startActivity(intent);
                 }
             });
@@ -136,13 +137,14 @@ public class RecupererNourritureActivity extends AppCompatActivity {
                                     jo = response.getJSONObject(i);
 
                                     String d = jo.getString("descriptionNourritureOffert");
+                                    String t = jo.getString("typeNourritureOffert");
                                     String p = jo.getString("provenanceNourritureOffert");
                                     String l = jo.getString("lieuNourritureOffert");
                                     String n = jo.getString("numero");
                                     String imgUrl = jo.getString("imageNourritureOffert");
                                     String j = jo.getString("jourRestant");
 
-                                    ofe = new ListNourritureOffert(d,p,l,n,j,Url.uri+"back/public/images/nourritureOffert/"+imgUrl);
+                                    ofe = new ListNourritureOffert(t,d,p,l,n,j,Url.uri+"back/public/images/nourritureOffert/"+imgUrl);
                                     offres.add(ofe);
                                 }
                                 adapter = new RecupererNourritureActivity.RecupListView(c,offres);

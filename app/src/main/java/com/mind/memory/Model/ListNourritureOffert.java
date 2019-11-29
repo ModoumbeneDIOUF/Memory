@@ -13,23 +13,29 @@ public class ListNourritureOffert{
     private String jj;
     private String donRandomKey;
 
-    public ListNourritureOffert(String donRandomKey,String des, String pro, String adr, String num,String img,String jj) {
+    public ListNourritureOffert(String donRandomKey,String des, String pro,String qu, String adr, String num,String img,String jj) {
         this.des = des;
         this.pro = pro;
         this.adr = adr;
         this.num = num;
         this.img = img;
         this.jj = jj;
+        this.qu = qu;
 
         this.donRandomKey = donRandomKey;
     }
-    public ListNourritureOffert(String des,String pro,String adr,String num,String jj,String img){
+    public ListNourritureOffert(String type,String des,String pro,String adr,String num,String jj,String img){
         this.des = des;
         this.pro = pro;
         this.adr = adr;
         this.num = num;
         this.img = img;
         this.jj = jj;
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public String getDes() {
@@ -58,6 +64,10 @@ public class ListNourritureOffert{
 
     public String getId() {
         return id;
+    }
+
+    public String getQu() {
+        return qu;
     }
 
     public String getRanomKey() {

@@ -38,16 +38,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/listDescNourritureOf"
-            android:text="provenance nourriture"
+            android:text="provenance "
             android:textSize="18dp"
             android:layout_marginLeft="3dp"
             android:textColor="@color/colorPrimaryDark"/>
+        <TextView
+            android:id="@+id/quantiteNourriture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/provenanceNourriture"
+            android:text="quantite"
+            android:textSize="18dp"
+            android:layout_marginLeft="3dp"
+            android:textColor="@color/colorPrimaryDark"/>
+
 
         <TextView
             android:id="@+id/listAdresse"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/provenanceNourriture"
+            android:layout_below="@id/quantiteNourriture"
             android:text="Adresse"
             android:textSize="18dp"
             android:layout_marginLeft="3dp"

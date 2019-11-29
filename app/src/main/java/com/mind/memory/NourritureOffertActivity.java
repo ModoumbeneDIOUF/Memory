@@ -59,6 +59,7 @@ public class NourritureOffertActivity extends AppCompatActivity {
             TextView provenanceOffert = view.findViewById(R.id.provenanceNourriture);
             TextView adresseNourritureOffert = view.findViewById(R.id.listAdresse);
             TextView numeroOffert = view.findViewById(R.id.listContact);
+            TextView quantite = view.findViewById(R.id.quantiteNourriture);
             TextView jourRestantOffert = view.findViewById(R.id.tempsRestant);
             ImageView imageOffert = view.findViewById(R.id.list_nourriture_pic);
 
@@ -69,6 +70,8 @@ public class NourritureOffertActivity extends AppCompatActivity {
             adresseNourritureOffert.setText("Adresse: "+listNourritureOffert.getAdr());
             numeroOffert.setText("Numéro :" +listNourritureOffert.getNum());
             jourRestantOffert.setText("Jour restant: "+listNourritureOffert.getJj());
+            quantite.setText("Quantite: "+listNourritureOffert.getQu());
+
 
             if (listNourritureOffert.getImg() != null && listNourritureOffert.getImg().length() > 0){
                 Picasso.get().load(listNourritureOffert.getImg()).into(imageOffert);
@@ -127,7 +130,7 @@ public class NourritureOffertActivity extends AppCompatActivity {
                                     String imgUrl = jo.getString("imageNourritureOffert");
                                     String j = jo.getString("jourRestant");
 
-                                    ofe = new ListNourritureOffert(rand,d,p,l,n,Url.uri+"back/public/images/nourritureOffert/"+imgUrl,j);
+                                    ofe = new ListNourritureOffert(rand,d,p,q,l,n,Url.uri+"back/public/images/nourritureOffert/"+imgUrl,j);
                                     offres.add(ofe);
                                 }
                                 adapter = new GriidViewdapter(c,offres);

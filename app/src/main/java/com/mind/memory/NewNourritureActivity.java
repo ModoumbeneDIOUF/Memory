@@ -299,6 +299,10 @@ public class NewNourritureActivity extends AppCompatActivity {
                         jourRestant.setEnabled(false);
                         jourRestant.setText("illimite");
                     }
+                    else if(typeChoist.equals("Plats")){
+                        jourRestant.setEnabled(false);
+                        jourRestant.setText("1");
+                    }
                     else {
                         jourRestant.setEnabled(true);
                     }

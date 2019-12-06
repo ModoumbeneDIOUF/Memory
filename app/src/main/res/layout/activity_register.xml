@@ -88,7 +88,7 @@
                             android:singleLine="true"
                             android:imeOptions="actionNext"
                             android:hint="Prénom"
-                            android:inputType="text"
+                            android:inputType="textCapWords"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             />
@@ -102,7 +102,7 @@
                             android:singleLine="true"
                             android:imeOptions="actionNext"
                             android:hint="Nom"
-                            android:inputType="text"
+                            android:inputType="textCapWords"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             />
@@ -117,7 +117,7 @@
                             android:singleLine="true"
                             android:imeOptions="actionNext"
                             android:hint="Adresse"
-                            android:inputType="text"
+                            android:inputType="textCapWords"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             />
@@ -164,7 +164,7 @@
                             android:singleLine="true"
                             android:imeOptions="actionNext"
                             android:hint="Mot de passe"
-                            android:inputType="text"
+                            android:inputType="textPassword"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             />
@@ -178,7 +178,7 @@
                             android:singleLine="true"
                             android:imeOptions="actionNext"
                             android:hint="Confirmation du mot de passe"
-                            android:inputType="text"
+                            android:inputType="textPassword"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             />

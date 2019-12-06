@@ -34,6 +34,8 @@ import android.widget.Toast;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.mind.memory.Model.Url;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -215,7 +217,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void save(String d1,String d2,String d3,String d4,String d5,String d6) {
-        String url = "http://192.168.43.216/back/public/api/utilisateurs";
+        String url = Url.url+"utilisateurs";
         Ion.with(RegisterActivity.this)
                 .load("POST",url)
                 .setBodyParameter("prenom",d1)
@@ -231,10 +233,12 @@ public class RegisterActivity extends AppCompatActivity {
                         try{
                             String mess =result.get("inscription").getAsString();
                             if (mess.equals("ok")){
-                                Toast.makeText(RegisterActivity.this, "Bien", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
+                                startActivity(intent);
+                                Toast.makeText(RegisterActivity.this, "Inscription réussi", Toast.LENGTH_SHORT).show();
                             }
                             else {
-                                Toast.makeText(RegisterActivity.this, "Mal", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegisterActivity.this, "Une erreur est intervenue veillez recomeencer ", Toast.LENGTH_SHORT).show();
                             }
                         }catch (Exception er){
                             Toast.makeText(RegisterActivity.this, "Erreur", Toast.LENGTH_SHORT).show();

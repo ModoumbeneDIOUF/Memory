@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_offrir"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Offrir Nourriture" />
+        <item
+            android:id="@+id/nav_vendre"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Vendre un produit" />
+        <item
+            android:id="@+id/nav_dispo"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Nourriture disponible" />
+        <item
+            android:id="@+id/nav_achat"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Produit à vendre" />
+
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Se deconnecter" />
+    </group>
+
+</menu>

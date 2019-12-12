@@ -20,7 +20,8 @@ public class AcceuilVontaireActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
     boolean doubleBackToExitPressedOnce = false;
     Toast toast;
-    private Button btn_offre,btn_vendu;
+    private Button btn_offre,btn_vendu,btn_espace;
+    String numero;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +30,16 @@ public class AcceuilVontaireActivity extends AppCompatActivity
 
         btn_offre = findViewById(R.id.main_btn_offre);
         btn_vendu = findViewById(R.id.main_btn_vendu);
+        btn_espace = findViewById(R.id.main_btn_espace);
 
+        Intent donnees = getIntent();
+        numero = donnees.getStringExtra("numero");
+       // Toast.makeText(this, numero, Toast.LENGTH_SHORT).show();
         btn_offre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AcceuilVontaireActivity.this,HomeVolontaireActivity.class);
+                intent.putExtra("numero",numero);
                 startActivity(intent);
             }
         });
@@ -41,7 +47,16 @@ public class AcceuilVontaireActivity extends AppCompatActivity
         btn_vendu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AcceuilVontaireActivity.this, "Vendu", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(AcceuilVontaireActivity.this,HomeVenduVolontaireActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btn_espace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AcceuilVontaireActivity.this,HomeVenduVolontaireActivity.class);
+                startActivity(intent);
             }
         });
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbaracceuilvolontaire);

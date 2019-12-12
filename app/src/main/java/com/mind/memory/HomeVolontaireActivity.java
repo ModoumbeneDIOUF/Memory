@@ -9,11 +9,15 @@ import android.widget.Toast;
 
 public class HomeVolontaireActivity extends AppCompatActivity {
     private CardView cardViewrepas,cardViewFruitLegume,cardViewCereale,cardViewVtmChess,cardViewArgent;
-
+    String numero;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_volontaire);
+
+        Intent donnees = getIntent();
+        numero = donnees.getStringExtra("numero");
+       // Toast.makeText(this, numero, Toast.LENGTH_SHORT).show();
 
         cardViewrepas = findViewById(R.id.cardViewrepasOffert);
         cardViewFruitLegume = findViewById(R.id.cardViewrfruitlegumeOffert);
@@ -26,6 +30,7 @@ public class HomeVolontaireActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(HomeVolontaireActivity.this,NourritureOffertActivity.class);
                 intent.putExtra("typeDon","Plats");
+                intent.putExtra("numero",numero);
                 startActivity(intent);
             }
         });
@@ -34,6 +39,7 @@ public class HomeVolontaireActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(HomeVolontaireActivity.this,NourritureOffertActivity.class);
                 intent.putExtra("typeDon","Fruits ou légumes");
+                intent.putExtra("numero",numero);
                 startActivity(intent);
 
             }
@@ -44,6 +50,7 @@ public class HomeVolontaireActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(HomeVolontaireActivity.this,NourritureOffertActivity.class);
                 intent.putExtra("typeDon","Céréales");
+                intent.putExtra("numero",numero);
                 startActivity(intent);
             }
         });
@@ -53,6 +60,7 @@ public class HomeVolontaireActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(HomeVolontaireActivity.this,NourritureOffertActivity.class);
                 intent.putExtra("typeDon","Vêtements ou chessures");
+                intent.putExtra("numero",numero);
                 startActivity(intent);
             }
         });
@@ -62,6 +70,7 @@ public class HomeVolontaireActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(HomeVolontaireActivity.this,NourritureOffertActivity.class);
                 intent.putExtra("typeDon","Argent");
+                intent.putExtra("numero",numero);
                 startActivity(intent);
             }
         });

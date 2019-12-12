@@ -31,14 +31,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class NourritureOffertActivity extends AppCompatActivity {
-    String typeDon;
+    String typeDon,numeroVolontaire;
 
 
     /*adapter*/
     public class GriidViewdapter extends BaseAdapter {
         Context c;
         ArrayList<ListNourritureOffert> nourritures ;
-        public GriidViewdapter(Context c, ArrayList<ListNourritureOffert> nourritures){
+        public GriidViewdapter(Context c, ArrayList<ListNourritureOffert> nourritures,String numeroVolontaire){
             this.c = c;
             this.nourritures = nourritures;
         }
@@ -87,6 +87,7 @@ public class NourritureOffertActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Intent intent = new Intent(NourritureOffertActivity.this,RecupererNourritureActivity.class);
                     intent.putExtra("randomKey",listNourritureOffert.getRanomKey());
+                    intent.putExtra("numero",numeroVolontaire);
                     startActivity(intent);
                   //  Toast.makeText(c, listNourritureOffert.getImg(), Toast.LENGTH_SHORT).show();
                 }
@@ -103,9 +104,9 @@ public class NourritureOffertActivity extends AppCompatActivity {
         private static final String data_dow_url = Url.url+"nourritureList";
         private final Context c;
         private GriidViewdapter adapter;
-        private String typeDon;
+        private String typeDon,numeroVolontaire;
 
-        public RetrofitNourritureOffert(Context c,String typeDon){this.c=c;this.typeDon=typeDon;}
+        public RetrofitNourritureOffert(Context c,String typeDon,String numeroVolontaire){this.c=c;this.typeDon=typeDon;this.numeroVolontaire = numeroVolontaire;}
 
         /*retrieve refresh*/
         public void retrieve(final ListView listView){
@@ -133,7 +134,7 @@ public class NourritureOffertActivity extends AppCompatActivity {
                                     ofe = new ListNourritureOffert(rand,d,p,q,l,n,Url.uri+"back/public/images/nourritureOffert/"+imgUrl,j);
                                     offres.add(ofe);
                                 }
-                                adapter = new GriidViewdapter(c,offres);
+                                adapter = new GriidViewdapter(c,offres,numeroVolontaire);
                                 listView.setAdapter(adapter);
 
                             }catch (JSONException E){
@@ -158,8 +159,9 @@ public class NourritureOffertActivity extends AppCompatActivity {
         ListView listView = findViewById(R.id.gridNourritureOffert);
         Intent donnees = getIntent();
         typeDon = donnees.getStringExtra("typeDon");
+        numeroVolontaire = donnees.getStringExtra("numero");
 
-        new RetrofitNourritureOffert(NourritureOffertActivity.this,typeDon).retrieve(listView);
+        new RetrofitNourritureOffert(NourritureOffertActivity.this,typeDon,numeroVolontaire).retrieve(listView);
     }
 
 }

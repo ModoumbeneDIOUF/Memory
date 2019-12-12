@@ -29,7 +29,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class RecupererNourritureActivity extends AppCompatActivity {
-    private String randomKey;
+    private String randomKey,numeroVolontaire;
     private Button btnRecup,btnCancelRecp;
 
 
@@ -37,10 +37,12 @@ public class RecupererNourritureActivity extends AppCompatActivity {
     public class RecupListView extends BaseAdapter {
         Context c;
         ArrayList<ListNourritureOffert> nourritures;
+        String numVol;
 
-        public RecupListView(Context c, ArrayList<ListNourritureOffert> nourritures) {
+        public RecupListView(Context c, ArrayList<ListNourritureOffert> nourritures,String numVol) {
             this.c = c;
             this.nourritures = nourritures;
+            this.numVol = numVol;
         }
 
         @Override
@@ -83,7 +85,10 @@ public class RecupererNourritureActivity extends AppCompatActivity {
             btnR.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(c, "Bien", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(RecupererNourritureActivity.this,ResponsableActivity.class);
+                    intent.putExtra("numero",numVol);
+                    startActivity(intent);
+                    //Toast.makeText(c, "Bien", Toast.LENGTH_SHORT).show();
                 }
             });
             btnC.setOnClickListener(new View.OnClickListener() {
@@ -117,9 +122,9 @@ public class RecupererNourritureActivity extends AppCompatActivity {
         private static final String data_dow_url = Url.url+"nourritureARecup";
         private final Context c;
         private RecupListView adapter;
-        private String random;
+        private String random,numVol;
 
-        public RetrofitRecup(Context c,String random){this.c=c;this.random=random;}
+        public RetrofitRecup(Context c,String random,String numVol){this.c=c;this.random=random;this.numVol=numVol;}
 
         /*retrieve refresh*/
         public void retrieve(final ListView listView){
@@ -147,7 +152,7 @@ public class RecupererNourritureActivity extends AppCompatActivity {
                                     ofe = new ListNourritureOffert(t,d,p,l,n,j,Url.uri+"back/public/images/nourritureOffert/"+imgUrl);
                                     offres.add(ofe);
                                 }
-                                adapter = new RecupererNourritureActivity.RecupListView(c,offres);
+                                adapter = new RecupererNourritureActivity.RecupListView(c,offres,numVol);
                                 listView.setAdapter(adapter);
 
                             }catch (JSONException E){
@@ -173,8 +178,9 @@ public class RecupererNourritureActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         randomKey = intent.getStringExtra("randomKey");
+        numeroVolontaire = intent.getStringExtra("numero");
 
-        new RetrofitRecup(RecupererNourritureActivity.this,randomKey).retrieve(listView);
+        new RetrofitRecup(RecupererNourritureActivity.this,randomKey,numeroVolontaire).retrieve(listView);
 
     }
 

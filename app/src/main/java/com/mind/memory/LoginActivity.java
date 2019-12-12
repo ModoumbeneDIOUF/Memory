@@ -145,6 +145,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     else{
                         Intent in = new Intent(LoginActivity.this,AcceuilVontaireActivity.class);
+                        in.putExtra("numero",loginResponse.getNumero());
                         startActivity(in);                    }
 
                 }else {

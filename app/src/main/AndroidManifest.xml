@@ -53,7 +53,8 @@
         <activity android:name=".AdminProduitVenduActivity" />
         <activity android:name=".ListUtilisateur" />
         <activity android:name=".HomeVolontaireActivity" />
-        <activity android:name=".AcceuilVontaireActivity"></activity>
+        <activity android:name=".AcceuilVontaireActivity" />
+        <activity android:name=".HomeVenduVolontaireActivity"></activity>
     </application>
 
 </manifest>

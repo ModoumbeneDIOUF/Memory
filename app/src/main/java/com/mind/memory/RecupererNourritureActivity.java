@@ -30,19 +30,18 @@ import java.util.ArrayList;
 
 public class RecupererNourritureActivity extends AppCompatActivity {
     private String randomKey,numeroVolontaire;
-    private Button btnRecup,btnCancelRecp;
 
-
-    //Adater
+    //Adapter
     public class RecupListView extends BaseAdapter {
         Context c;
         ArrayList<ListNourritureOffert> nourritures;
-        String numVol;
+        String numVol,random;
 
-        public RecupListView(Context c, ArrayList<ListNourritureOffert> nourritures,String numVol) {
+        public RecupListView(Context c, ArrayList<ListNourritureOffert> nourritures,String numVol,String random) {
             this.c = c;
             this.nourritures = nourritures;
             this.numVol = numVol;
+            this.random = random;
         }
 
         @Override
@@ -85,6 +84,23 @@ public class RecupererNourritureActivity extends AppCompatActivity {
             btnR.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //Mettre à jour le statut
+                    String data_dow_url = Url.url+"updateStatus";
+                    AndroidNetworking.get(data_dow_url+"/"+random)
+                            .setPriority(Priority.MEDIUM)
+                            .build()
+                            .getAsJSONArray(new JSONArrayRequestListener() {
+                                @Override
+                                public void onResponse(JSONArray response) {
+
+                                }
+
+                                @Override
+                                public void onError(ANError anError) {
+
+                                }
+                            });
+
                     Intent intent = new Intent(RecupererNourritureActivity.this,ResponsableActivity.class);
                     intent.putExtra("numero",numVol);
                     startActivity(intent);
@@ -152,7 +168,7 @@ public class RecupererNourritureActivity extends AppCompatActivity {
                                     ofe = new ListNourritureOffert(t,d,p,l,n,j,Url.uri+"back/public/images/nourritureOffert/"+imgUrl);
                                     offres.add(ofe);
                                 }
-                                adapter = new RecupererNourritureActivity.RecupListView(c,offres,numVol);
+                                adapter = new RecupererNourritureActivity.RecupListView(c,offres,numVol,random);
                                 listView.setAdapter(adapter);
 
                             }catch (JSONException E){

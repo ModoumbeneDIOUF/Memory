@@ -16,8 +16,8 @@
         android:elevation="10dp"
         android:theme="@style/ToolbarTheme" />
 
-                <android.support.v7.widget.RecyclerView
-                       android:id="@+id/responsable_recycle"
+                <ListView
+                       android:id="@+id/responsable_listV"
                        android:layout_marginTop="50dp"
                        android:layout_marginStart="10dp"
                        android:layout_width="match_parent"
@@ -25,7 +25,7 @@
                         android:fastScrollAlwaysVisible="true"
                        tools:ignore="RtlCompat">
 
-                   </android.support.v7.widget.RecyclerView>
+                   </ListView>
 
 
 </RelativeLayout>

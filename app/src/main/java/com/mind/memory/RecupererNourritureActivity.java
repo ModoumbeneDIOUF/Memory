@@ -18,6 +18,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.mind.memory.Model.ListNourritureOffert;
 import com.mind.memory.Model.Url;
 import com.squareup.picasso.Picasso;
@@ -100,7 +101,45 @@ public class RecupererNourritureActivity extends AppCompatActivity {
 
                                 }
                             });
+                    //Insertion dudit don dans le dashboard volontaire
+                    String data_url = Url.url+"addToDonRecup";
+                    AndroidNetworking.upload(data_url)
+                            .addMultipartParameter("descDon",listNourritureOffert.getDes())
+                            .addMultipartParameter("adresseDon",listNourritureOffert.getAdr())
+                            .addMultipartParameter("donneurDon",listNourritureOffert.getNum())
+                            .addMultipartParameter("volontaireDon",numVol)
+                            .addMultipartParameter("name","upload")
+                            .setTag("MYSQL_UPLOAD")
+                            .setPriority(Priority.HIGH)
+                            .build()
+                            .getAsJSONObject(new JSONObjectRequestListener() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    if (response != null){
+                                        try {
+                                            //show response from server
+                                            String message = response.get("message").toString();
+                                            if (message.equalsIgnoreCase("ok")){
+                                                Toast.makeText(c, "Vous pouvez", Toast.LENGTH_SHORT).show();
+                                                // Intent intent = new Intent(NewNourritureActivity.this,NourritureOffertActivity.class);
+                                                //startActivity(intent);
+                                            }else {
+                                                Toast.makeText(c, "Vous ne pouvez pas", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }catch (Exception e){
+                                            Toast.makeText(c, "JsonException", Toast.LENGTH_SHORT).show();
+                                        }
 
+                                    }else{
+                                        Toast.makeText(c, "Null response", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onError(ANError anError) {
+
+                                }
+                            });
                     Intent intent = new Intent(RecupererNourritureActivity.this,ResponsableActivity.class);
                     intent.putExtra("numero",numVol);
                     startActivity(intent);

@@ -8,7 +8,6 @@
     <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-
     <uses-permission
         android:name="android.permission.MANAGE_DOCUMENTS"
         tools:ignore="ProtectedPermissions" />
@@ -56,7 +55,8 @@
         <activity android:name=".ListUtilisateur" />
         <activity android:name=".HomeVolontaireActivity" />
         <activity android:name=".AcceuilVontaireActivity" />
-        <activity android:name=".HomeVenduVolontaireActivity"></activity>
+        <activity android:name=".HomeVenduVolontaireActivity" />
+        <activity android:name=".EspaceVolontaireActivity"></activity>
     </application>
 
 </manifest>

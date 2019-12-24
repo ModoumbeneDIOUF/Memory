@@ -55,7 +55,7 @@ public class AcceuilVontaireActivity extends AppCompatActivity
         btn_espace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AcceuilVontaireActivity.this,HomeVenduVolontaireActivity.class);
+                Intent intent = new Intent(AcceuilVontaireActivity.this,EspaceVolontaireActivity.class);
                 startActivity(intent);
             }
         });

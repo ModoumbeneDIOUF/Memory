@@ -56,6 +56,8 @@ public class AcceuilVontaireActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AcceuilVontaireActivity.this,EspaceVolontaireActivity.class);
+                intent.putExtra("numero",numero);
+                startActivity(intent);
                 startActivity(intent);
             }
         });

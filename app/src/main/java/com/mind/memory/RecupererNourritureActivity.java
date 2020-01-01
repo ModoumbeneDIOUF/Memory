@@ -85,7 +85,7 @@ public class RecupererNourritureActivity extends AppCompatActivity {
             btnR.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //Mettre à jour le statut
+                    //Mettre à jour le statut dans
                     String data_dow_url = Url.url+"updateStatus";
                     AndroidNetworking.get(data_dow_url+"/"+random)
                             .setPriority(Priority.MEDIUM)
@@ -106,6 +106,7 @@ public class RecupererNourritureActivity extends AppCompatActivity {
                     AndroidNetworking.upload(data_url)
                             .addMultipartParameter("descDon",listNourritureOffert.getDes())
                             .addMultipartParameter("adresseDon",listNourritureOffert.getAdr())
+                            .addMultipartParameter("donRandomKey",random)
                             .addMultipartParameter("donneurDon",listNourritureOffert.getNum())
                             .addMultipartParameter("volontaireDon",numVol)
                             .addMultipartParameter("name","upload")

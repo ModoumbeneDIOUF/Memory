@@ -159,7 +159,7 @@ public class NewNourritureActivity extends AppCompatActivity {
                                         String message = response.get("message").toString();
                                         Toast.makeText(c, message, Toast.LENGTH_SHORT).show();
                                         if (message.equalsIgnoreCase("ok")){
-                                            Toast.makeText(c, "Bien", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(c, "Bien ajouté", Toast.LENGTH_SHORT).show();
                                             // Intent intent = new Intent(NewNourritureActivity.this,NourritureOffertActivity.class);
                                             //startActivity(intent);
                                         }else {
@@ -178,7 +178,7 @@ public class NewNourritureActivity extends AppCompatActivity {
                             @Override
                             public void onError(ANError anError) {
                                 //progressBar.dismis()
-                                Toast.makeText(c, "unsuccessful", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(c, "une erreur est survenue veillez recommencer", Toast.LENGTH_SHORT).show();
                             }
                         });
 
@@ -191,7 +191,7 @@ public class NewNourritureActivity extends AppCompatActivity {
         pictureDialog.setTitle("Choisir une photo");
         String[] pictureDialogItems = {
                 "Photo Gallery",
-                 };
+        };
         pictureDialog.setItems(pictureDialogItems,
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -239,7 +239,7 @@ public class NewNourritureActivity extends AppCompatActivity {
 
         }
 
-        }
+    }
 
 
 
@@ -277,7 +277,7 @@ public class NewNourritureActivity extends AppCompatActivity {
         profil.add(0,"Précisez le type de don");
         profil.add("Plats");
         profil.add("Fruits ou légumes");
-        profil.add("Céréales");
+        profil.add("Céréale");
         profil.add("Vêtements ou chessures");
         profil.add("Argent");
 

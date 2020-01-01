@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class SplashActivity extends AppCompatActivity {
-    private static int timeOut = 3000;
+    private static int timeOut = 4000;
     TextView welcom;
     ImageView imageView;
     @Override

@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -45,7 +46,7 @@ public class NewNourritureActivity extends AppCompatActivity {
     String typen,typeChoist,provenancen,descn,lieun,quantiten,contactn,dateAjout,jour,randomLey,timeAjout;
     Bitmap bitmap;
     final int PICK_IMAGE_REQUEST = 234;
-    private ProgressDialog loadingBar;
+    private ProgressBar upLoadProgressBar;
     private int GALLERY = 1, CAMERA = 2;
 
     /*
@@ -119,6 +120,7 @@ public class NewNourritureActivity extends AppCompatActivity {
     public class Myuploader{
         private static final String data_upload_url =Url.url+"offrirNourriture";
         private final Context c;
+
         public  Myuploader(Context c){this.c = c;}
 
         public void upload(NourritureOffert s,View...inputView){
@@ -134,6 +136,7 @@ public class NewNourritureActivity extends AppCompatActivity {
                     Toast.makeText(c, "Veillez choisir une image", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                upLoadProgressBar.setVisibility(View.VISIBLE);
                 //progressBar
                 AndroidNetworking.upload(data_upload_url)
                         .addMultipartFile("image",imageFile)
@@ -153,15 +156,16 @@ public class NewNourritureActivity extends AppCompatActivity {
                         .getAsJSONObject(new JSONObjectRequestListener() {
                             @Override
                             public void onResponse(JSONObject response) {
+
                                 if (response != null){
                                     try {
                                         //show response from server
                                         String message = response.get("message").toString();
-                                        Toast.makeText(c, message, Toast.LENGTH_SHORT).show();
                                         if (message.equalsIgnoreCase("ok")){
-                                            Toast.makeText(c, "Bien ajouté", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(c, "Don offert avec success", Toast.LENGTH_SHORT).show();
                                             // Intent intent = new Intent(NewNourritureActivity.this,NourritureOffertActivity.class);
                                             //startActivity(intent);
+
                                         }else {
                                             Toast.makeText(c, message, Toast.LENGTH_SHORT).show();
                                         }
@@ -172,12 +176,14 @@ public class NewNourritureActivity extends AppCompatActivity {
                                 }else{
                                     Toast.makeText(c, "Null response", Toast.LENGTH_SHORT).show();
                                 }
+                                upLoadProgressBar.setVisibility(View.GONE);
                                 //progressBar.dismis()
                             }
 
                             @Override
                             public void onError(ANError anError) {
                                 //progressBar.dismis()
+                                upLoadProgressBar.setVisibility(View.GONE);
                                 Toast.makeText(c, "une erreur est survenue veillez recommencer", Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -185,6 +191,7 @@ public class NewNourritureActivity extends AppCompatActivity {
             }
         }
     }
+
 
     private void openGallery(){
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
@@ -241,8 +248,6 @@ public class NewNourritureActivity extends AppCompatActivity {
 
     }
 
-
-
     //getImage path
     public String getImagePath(Uri uri){
         String [] projection = {MediaStore.Images.Media.DATA};
@@ -262,7 +267,6 @@ public class NewNourritureActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_nourriture);
-        loadingBar =  new ProgressDialog(this);
 
         nouritureImage = findViewById(R.id.select_food_pic);
         type = findViewById(R.id.typeAliment);
@@ -273,6 +277,10 @@ public class NewNourritureActivity extends AppCompatActivity {
         contact = findViewById(R.id.contactNoutiture);
         jourRestant = findViewById(R.id.jourRestantNourriture);
         btnValider = findViewById(R.id.btnAddNourriture);
+        upLoadProgressBar = findViewById(R.id.uploadBar);
+        upLoadProgressBar.setVisibility(View.INVISIBLE);
+
+
         final List<String> profil = new ArrayList<>();
         profil.add(0,"Précisez le type de don");
         profil.add("Plats");
@@ -298,13 +306,16 @@ public class NewNourritureActivity extends AppCompatActivity {
                     if (typeChoist.equals("Vêtements ou chessures")|| typeChoist.equals("Argent")){
                         jourRestant.setEnabled(false);
                         jourRestant.setText("illimite");
+                        btnValider.setText("Ajouter");
                     }
                     else if(typeChoist.equals("Plats")){
                         jourRestant.setEnabled(false);
                         jourRestant.setText("1");
+                        btnValider.setText("Proposer");
                     }
                     else {
                         jourRestant.setEnabled(true);
+                        btnValider.setText("Ajouter");
                     }
                 }
             }
@@ -339,10 +350,12 @@ public class NewNourritureActivity extends AppCompatActivity {
                 randomLey = dateAjout + timeAjout;
                 if ( descn.equals("") ||provenancen.equals("") ||lieun.equals("") || quantiten.equals("")||contactn.equals("") || jour.equals(""))
                 {
+
                     desc.setError("requis");provenance.setError("requis"); lieu.setError("requis");
                     quantite.setError("requis");contact.setError("requis");jourRestant.setError("requis");
                     Toast.makeText(NewNourritureActivity.this, "Veillez remplir tous les champs", Toast.LENGTH_LONG).show();
-                }
+
+                 }
                 else if(targetUri == null)
                 {
                     Toast.makeText(NewNourritureActivity.this, "Veillez choisir une image", Toast.LENGTH_LONG).show();
@@ -351,11 +364,13 @@ public class NewNourritureActivity extends AppCompatActivity {
                     Toast.makeText(NewNourritureActivity.this, "Précisez le type de don", Toast.LENGTH_LONG).show();
                 }
                 else {
+
                     clear();
 
                     NourritureOffert nourritureOffert = new NourritureOffert(randomLey,typen,descn,provenancen,lieun,quantiten,contactn,jour,dateAjout);
 
                     new Myuploader(NewNourritureActivity.this).upload(nourritureOffert,type,desc,lieu,provenance,contact);
+
 
                 }
 

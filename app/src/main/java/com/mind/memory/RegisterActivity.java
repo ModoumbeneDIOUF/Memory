@@ -45,7 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Animation animation;
     private Spinner spinner;
     private Button btnRegister;
-    String profilChoisit,prenom,nom,adresse,profil,phone,password,confirm;
+    String profilChoisit,prenom,nom,adresse,profil,phone,password,confirm,verifNum;
     private EditText registerFirstName,registerName,registerAdress,registerPhone,registerPassword,registerPasswordConfirm;
     private ProgressDialog loadingBar;
 
@@ -131,6 +131,7 @@ public class RegisterActivity extends AppCompatActivity {
          phone = registerPhone.getText().toString();
          password = registerPassword.getText().toString();
          confirm = registerPasswordConfirm.getText().toString();
+         verifNum = registerPhone.getText().toString().substring(0,2);
 
         if (TextUtils.isEmpty(prenom)){
 
@@ -151,6 +152,14 @@ public class RegisterActivity extends AppCompatActivity {
         else if( TextUtils.isEmpty(phone)){
             registerPhone.setError("requis");
             Toast.makeText(this, "Tous les champs sont requis", Toast.LENGTH_LONG).show();
+
+        }
+        else if(!verifNum.equals("77") && !verifNum.equals("78") && !verifNum.equals("76") && !verifNum.equals("75") && !verifNum.equals("33")){
+            Toast.makeText(this, "Veillez saisir le numero au bon format", Toast.LENGTH_LONG).show();
+
+        }
+        else if(phone.length() < 9 || phone.length() > 9){
+            Toast.makeText(this, "Veillez saisir un numero de 9 chiffres", Toast.LENGTH_LONG).show();
 
         }
         else if (TextUtils.isEmpty(password)){
@@ -198,26 +207,25 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         else {
-            loadingBar.setTitle("Inscription");
-            loadingBar.setMessage("Veillez patienter un instant nous traitons votre demande");
-            loadingBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            loadingBar.setMax(100);
-            loadingBar.getMax();
-            loadingBar.getProgress();
-            loadingBar.incrementProgressBy(10);
-            loadingBar.setCancelable(false);
-            loadingBar.setCanceledOnTouchOutside(false);
-            loadingBar.show();
-
-
-            save(prenom,nom,adresse,profil,phone,password);
-            loadingBar.dismiss();
-            Clean();
+            Toast.makeText(this, verifNum, Toast.LENGTH_SHORT).show();
+           // save(prenom,nom,adresse,profil,phone,password);
+            //Clean();
         }
     }
 
     private void save(String d1,String d2,String d3,String d4,String d5,String d6) {
         String url = Url.url+"utilisateurs";
+        loadingBar.setTitle("Inscription");
+        loadingBar.setMessage("Veillez patienter un instant nous traitons votre demande");
+        loadingBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        loadingBar.setMax(500);
+        loadingBar.getMax();
+        loadingBar.getProgress();
+        loadingBar.incrementProgressBy(5);
+        loadingBar.setCancelable(false);
+        loadingBar.setCanceledOnTouchOutside(false);
+        loadingBar.show();
+
         Ion.with(RegisterActivity.this)
                 .load("POST",url)
                 .setBodyParameter("prenom",d1)
@@ -233,15 +241,18 @@ public class RegisterActivity extends AppCompatActivity {
                         try{
                             String mess =result.get("inscription").getAsString();
                             if (mess.equals("ok")){
+                                loadingBar.dismiss();
                                 Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
                                 startActivity(intent);
                                 Toast.makeText(RegisterActivity.this, "Inscription réussi", Toast.LENGTH_SHORT).show();
                             }
                             else {
-                                Toast.makeText(RegisterActivity.this, "Une erreur est intervenue veillez recomeencer ", Toast.LENGTH_SHORT).show();
+                                loadingBar.dismiss();
+                                Toast.makeText(RegisterActivity.this, "Numéro déjà utilisé ", Toast.LENGTH_SHORT).show();
                             }
                         }catch (Exception er){
-                            Toast.makeText(RegisterActivity.this, "Erreur", Toast.LENGTH_SHORT).show();
+                            loadingBar.dismiss();
+                            Toast.makeText(RegisterActivity.this, "Erreur serveur", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -251,7 +262,6 @@ public class RegisterActivity extends AppCompatActivity {
         registerFirstName.setText("");
         registerName.setText("");
         registerAdress.setText("");
-        registerPhone.setText("");
         registerPassword.setText("");
         registerPasswordConfirm.setText("");
     }

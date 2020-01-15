@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="45dp"
-        android:text="Bienvenu dans Ndimbeule"
+        android:text="Bienvenu dans SunuDon"
         android:textColor="@color/colorWhite"
         android:textSize="17sp" />
 

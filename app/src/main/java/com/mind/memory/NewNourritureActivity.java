@@ -184,7 +184,7 @@ public class NewNourritureActivity extends AppCompatActivity {
                             public void onError(ANError anError) {
                                 //progressBar.dismis()
                                 upLoadProgressBar.setVisibility(View.GONE);
-                                Toast.makeText(c, "une erreur est survenue veillez recommencer", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(c, ""+anError, Toast.LENGTH_SHORT).show();
                             }
                         });
 
@@ -237,7 +237,6 @@ public class NewNourritureActivity extends AppCompatActivity {
                     //Toast.makeText(MainActivity.this, "Image Saved!", Toast.LENGTH_SHORT).show();
                     nouritureImage.setImageBitmap(bitmap);
 
-
                 } catch (IOException e) {
                     e.printStackTrace();
                     Toast.makeText(NewNourritureActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
@@ -247,7 +246,6 @@ public class NewNourritureActivity extends AppCompatActivity {
         }
 
     }
-
     //getImage path
     public String getImagePath(Uri uri){
         String [] projection = {MediaStore.Images.Media.DATA};
@@ -261,7 +259,6 @@ public class NewNourritureActivity extends AppCompatActivity {
         cursor.close();
         return s;
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -279,7 +276,6 @@ public class NewNourritureActivity extends AppCompatActivity {
         btnValider = findViewById(R.id.btnAddNourriture);
         upLoadProgressBar = findViewById(R.id.uploadBar);
         upLoadProgressBar.setVisibility(View.INVISIBLE);
-
 
         final List<String> profil = new ArrayList<>();
         profil.add(0,"Précisez le type de don");
@@ -325,7 +321,6 @@ public class NewNourritureActivity extends AppCompatActivity {
 
             }
         });
-
 
         btnValider.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -386,8 +381,6 @@ public class NewNourritureActivity extends AppCompatActivity {
         });
 
     }
-
-
 
     private void clear() {
         desc.setText("");

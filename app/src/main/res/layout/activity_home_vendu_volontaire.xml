@@ -11,6 +11,18 @@
     android:background="#fcfcfc"
     android:gravity="center"
     android:id="@+id/ll">
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbarHomeVenduVolontaire"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@color/colorPrimaryDark"
+            app:popupTheme="@style/AppTheme" />
+
+    </android.support.design.widget.AppBarLayout>
     <LinearLayout
         android:clipToPadding="false"
         android:gravity="center"

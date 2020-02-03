@@ -2,86 +2,314 @@ package com.mind.memory;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.support.annotation.NonNull;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+
+import com.mind.memory.Model.Url;
 import com.theartofdev.edmodo.cropper.CropImage;
 
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
-import java.io.FileNotFoundException;
-import java.util.HashMap;
+import java.util.List;
 
 public class VendreProduitActivity extends AppCompatActivity {
-    private EditText vendreQuantite, vendrePrix;
+    private EditText venteDesc,venteAdresse,venteNumero,vendreQuantite, vendrePrix;
     private TextView vendreExpiretion;
-    String quantite, prix, expiration, saveCurrentDate, saveCurrentTime;
+    Spinner typeVendu;
+    String produitRandomKey,typeChoist,typen,desc,adr,numero,quantite, prix, expiration ="",dateVente,timeAjout,saveCurrentDate, saveCurrentTime;
     private ImageView vendreImage;
     private Button vendreBtn;
-    private Uri imageUri;
+    public Uri imageUri;
+    Bitmap bitmap;
+    private int GALLERY = 1;
     private DatePickerDialog datePickerDialog;
     int year,month,dayOfMonth;
     Calendar calendar;
-    private String produitRandomKey, dowloadImageUri;
-    private StorageReference produitImageRef;
-    private DatabaseReference produitRef;
+
     private ProgressDialog loadingBar;
     private DatePickerDialog.OnDateSetListener dateSetListener;
+
+     /*
+        produit vendu class
+    */
+        class VendreProduit{
+         private String typeProduitVendu;
+         private String descriptionProduitVendu;
+         private String adresseProduitVendu;
+         private String prixProduitVendu;
+         private String quantiteProduitVendu;
+         private String numero;
+         private String validiteProduitVendu;
+         private String dateVente;
+         private String venteRandomKey;
+
+         public VendreProduit(String typeProduitVendu, String descriptionProduitVendu, String adresseProduitVendu, String prixProduitVendu, String quantiteProduitVendu, String numero, String validiteProduitVendu, String dateVente, String venteRandomKey) {
+             this.typeProduitVendu = typeProduitVendu;
+             this.descriptionProduitVendu = descriptionProduitVendu;
+             this.adresseProduitVendu = adresseProduitVendu;
+             this.prixProduitVendu = prixProduitVendu;
+             this.quantiteProduitVendu = quantiteProduitVendu;
+             this.numero = numero;
+             this.validiteProduitVendu = validiteProduitVendu;
+             this.dateVente = dateVente;
+             this.venteRandomKey = venteRandomKey;
+         }
+
+         public String getTypeProduitVendu() {
+             return typeProduitVendu;
+         }
+
+         public String getDescriptionProduitVendu() {
+             return descriptionProduitVendu;
+         }
+
+         public String getAdresseProduitVendu() {
+             return adresseProduitVendu;
+         }
+
+         public String getPrixProduitVendu() {
+             return prixProduitVendu;
+         }
+
+         public String getQuantiteProduitVendu() {
+             return quantiteProduitVendu;
+         }
+
+         public String getNumero() {
+             return numero;
+         }
+
+         public String getValiditeProduitVendu() {
+             return validiteProduitVendu;
+         }
+
+         public String getDateVente() {
+             return dateVente;
+         }
+
+         public String getVenteRandomKey() {
+             return venteRandomKey;
+         }
+     }
+        /*
+     Upload class
+ */
+    public class Myuploader{
+            private static final String data_upload_url =Url.url+"vendreProduit";
+            private final Context c;
+
+            public  Myuploader(Context c){this.c = c;}
+
+            public void upload(VendreProduit s,View...inputView){
+
+                if (s == null){
+                    Toast.makeText(c, "Pas de donnés à enrigistrer", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    File imageFile;
+                    try {
+                        imageFile = new File(getImagePath(imageUri));
+
+                    }catch (Exception e){
+                        Toast.makeText(c, "Veillez choisir une image", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    AndroidNetworking.upload(data_upload_url)
+                            .addMultipartFile("image",imageFile)
+                            .addMultipartParameter("typeProduitVendu",s.getTypeProduitVendu())
+                            .addMultipartParameter("descriptionProduitVendu",s.getDescriptionProduitVendu())
+                            .addMultipartParameter("adresseProduitVendu",s.getAdresseProduitVendu())
+                            .addMultipartParameter("numero",s.getNumero())
+                            .addMultipartParameter("quantiteProduitVendu",s.getQuantiteProduitVendu())
+                            .addMultipartParameter("prixProduitVendu",s.getPrixProduitVendu())
+                            .addMultipartParameter("validiteProduitVendu",s.getValiditeProduitVendu())
+                            .addMultipartParameter("dateVente",s.getDateVente())
+                            .addMultipartParameter("venteRandomKey",s.getVenteRandomKey())
+                            .addMultipartParameter("name","upload")
+                            .setTag("MYSQL_UPLOAD")
+                            .setPriority(Priority.HIGH)
+                            .build()
+                            .getAsJSONObject(new JSONObjectRequestListener() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+
+                                    if (response != null){
+                                        try {
+                                            //show response from server
+                                            String message = response.get("message").toString();
+                                            if (message.equalsIgnoreCase("ok")){
+                                                Toast.makeText(c, "Produit ajouter avec success", Toast.LENGTH_LONG).show();
+                                                // Intent intent = new Intent(NewNourritureActivity.this,NourritureOffertActivity.class);
+                                                //startActivity(intent);
+
+                                            }else {
+                                                Toast.makeText(c, message, Toast.LENGTH_LONG).show();
+                                            }
+                                        }catch (Exception e){
+                                            Toast.makeText(c, "JsonException", Toast.LENGTH_LONG).show();
+                                        }
+
+                                    }else{
+                                        Toast.makeText(c, "Null response", Toast.LENGTH_LONG).show();
+                                    }
+                                   // upLoadProgressBar.setVisibility(View.GONE);
+                                    //progressBar.dismis()
+                                }
+
+                                @Override
+                                public void onError(ANError anError) {
+                                    //progressBar.dismis()
+                                    //upLoadProgressBar.setVisibility(View.GONE);
+                                    Toast.makeText(c, ""+anError.toString(), Toast.LENGTH_LONG).show();
+                                }
+                            });
+
+                }
+            }
+        }
+    private void openGallery() {
+        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
+        pictureDialog.setTitle("Choisir une photo");
+        String[] pictureDialogItems = {
+                "Photo Gallery",
+        };
+        pictureDialog.setItems(pictureDialogItems,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                choosePhotoFromGallary();
+                                break;
+                        }
+                    }
+                });
+        pictureDialog.show();
+    }
+    public void choosePhotoFromGallary() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        startActivityForResult(galleryIntent, GALLERY);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == this.RESULT_CANCELED) {
+            return;
+        }
+        if (requestCode == GALLERY) {
+            if (data != null) {
+                Uri contentURI = data.getData();
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
+                    // String path = saveImage(bitmap);
+                    imageUri = data.getData();
+                    //Toast.makeText(MainActivity.this, "Image Saved!", Toast.LENGTH_SHORT).show();
+                    vendreImage.setImageBitmap(bitmap);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                        Toast.makeText(VendreProduitActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    //getImage path
+    public String getImagePath(Uri uri){
+        String [] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(uri,projection,null,null,null);
+        if (cursor == null){
+            return null;
+        }
+        int columnIndex =  cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String s = cursor.getString(columnIndex);
+        cursor.close();
+        return s;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vendre_produit);
 
-        produitImageRef = FirebaseStorage.getInstance().getReference().child("Images Produit Vendu");
-        produitRef = FirebaseDatabase.getInstance().getReference().child("ProduitVendu");
 
         loadingBar = new ProgressDialog(this);
-
+        typeVendu = findViewById(R.id.typVendu);
+        venteDesc = findViewById(R.id.vendreDes);
+        venteAdresse = findViewById(R.id.vendreAdresse);
+        venteNumero = findViewById(R.id.vendreNumero);
         vendreQuantite = findViewById(R.id.vendreQuantite);
         vendrePrix = findViewById(R.id.vendrePrix);
         vendreExpiretion = findViewById(R.id.vendreExpiration);
         vendreImage = findViewById(R.id.vendreImage);
         vendreBtn = findViewById(R.id.vendreBtn);
 
-        vendreBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        final List<String> typeV = new ArrayList<>();
+        typeV.add(0,"Précisez le type du produit");
+        typeV.add("Cosmétique");
+        typeV.add("Fruits ou légumes");
+        typeV.add("Céréale");
+        typeV.add("Vêtements ou chessures");
 
-                ValidateProduitData();
+        ArrayAdapter<String> datatype;
+        datatype = new ArrayAdapter(this,android.R.layout.simple_spinner_item,typeV);
+        datatype.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        typeVendu.setAdapter(datatype);
+        typeVendu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (parent.getItemAtPosition(position).equals("Précisez le type du produit")){
+                    typeChoist = "vide";
+                }
+                else {
+                    typeChoist = parent.getItemAtPosition(position).toString();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
-
         vendreImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,9 +325,9 @@ public class VendreProduitActivity extends AppCompatActivity {
                 dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
 
                 datePickerDialog = new DatePickerDialog(VendreProduitActivity.this,
-                                    android.R.style.Theme_Holo_Dialog_MinWidth,
-                                    dateSetListener,
-                                    year,month,dayOfMonth);
+                        android.R.style.Theme_Holo_Dialog_MinWidth,
+                        dateSetListener,
+                        year,month,dayOfMonth);
                 datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
                 datePickerDialog.show();
@@ -111,223 +339,64 @@ public class VendreProduitActivity extends AppCompatActivity {
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
 
-                String date = month + "/" + day + "/" + year;
-                vendreExpiretion.setText(date);
+                expiration = month + "/" + day + "/" + year;
+                vendreExpiretion.setText(expiration);
             }
         };
-
-    }
-
-    private void openGallery() {
-        CropImage.activity().start(VendreProduitActivity.this);
-
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode== CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-
-            if (resultCode == RESULT_OK){
-                imageUri = result.getUri();
-                vendreImage.setImageURI(imageUri);
-            }
-        }
-
-    }
-
-    private void ValidateProduitData() {
-        quantite = vendreQuantite.getText().toString();
-        prix = vendrePrix.getText().toString();
-        expiration = vendreExpiretion.getText().toString();
-
-        if (imageUri == null) {
-
-            Toast toast = new Toast(getApplicationContext());
-            toast.setGravity(Gravity.CENTER,0,0);
-            TextView tv = new TextView(VendreProduitActivity.this);
-            tv.setBackgroundColor(Color.WHITE);
-            tv.setTextColor(Color.RED);
-            tv.setTextSize(15);
-
-            Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
-            tv.setTypeface(t);
-            tv.setPadding(10,10,10,10);
-            tv.setText("Veillez mettre l'image de la nourriture svp");
-            toast.setView(tv);
-            toast.setDuration(Toast.LENGTH_LONG);
-            toast.show();
-
-           // Toast.makeText(this, "Vous devez mettre l'image du produit", Toast.LENGTH_SHORT).show();
-        } else if (TextUtils.isEmpty(quantite) || TextUtils.isEmpty(prix) || TextUtils.isEmpty(expiration)) {
-            Toast toast = new Toast(getApplicationContext());
-            toast.setGravity(Gravity.CENTER,0,0);
-            TextView tv = new TextView(VendreProduitActivity.this);
-            tv.setBackgroundColor(Color.WHITE);
-            tv.setTextColor(Color.RED);
-            tv.setTextSize(15);
-
-            Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
-            tv.setTypeface(t);
-            tv.setPadding(10,10,10,10);
-            tv.setText("Tous les champs sont");
-            toast.setView(tv);
-            toast.setDuration(Toast.LENGTH_LONG);
-            toast.show();
-
-            //Toast.makeText(this, "Veillez remplirre tous les champs svp", Toast.LENGTH_SHORT).show();
-
-        } else {
-            StorageProduitInfo();
-        }
-    }
-
-    private void StorageProduitInfo() {
-        loadingBar.setTitle("Enrigistrement");
-        loadingBar.setMessage("Veillez patienter un instant nous traitons votre demande");
-        loadingBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        loadingBar.setMax(100);
-        loadingBar.getMax();
-        loadingBar.getProgress();
-        loadingBar.incrementProgressBy(2);
-        loadingBar.setCancelable(false);
-        loadingBar.setCanceledOnTouchOutside(false);
-        loadingBar.show();
-
-        Calendar calendar = Calendar.getInstance();
-
-        SimpleDateFormat currentDate = new SimpleDateFormat("MM dd,yyyy");
-        saveCurrentDate = currentDate.format(calendar.getTime());
-
-        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
-        saveCurrentTime = currentTime.format(calendar.getTime());
-
-        produitRandomKey = saveCurrentDate + saveCurrentTime;
-
-        final StorageReference filePath = produitImageRef.child(imageUri.getLastPathSegment() + produitRandomKey + ".jpg");
-        final UploadTask uploadTask = filePath.putFile(imageUri);
-
-        uploadTask.addOnFailureListener(new OnFailureListener() {
+        vendreBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFailure(@NonNull Exception e) {
+            public void onClick(View v) {
 
-                String message = e.toString();
+                typen = typeChoist;
+                desc = venteDesc.getText().toString();
+                adr = venteAdresse.getText().toString();
+                prix = vendrePrix.getText().toString();
+                numero = venteNumero.getText().toString();
+                quantite = vendreQuantite.getText().toString();
 
-                Toast toast = new Toast(getApplicationContext());
-                toast.setGravity(Gravity.CENTER,0,0);
-                TextView tv = new TextView(VendreProduitActivity.this);
-                tv.setBackgroundColor(Color.WHITE);
-                tv.setTextColor(Color.RED);
-                tv.setTextSize(15);
+                Calendar calendar = Calendar.getInstance();
 
-                Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
-                tv.setTypeface(t);
-                tv.setPadding(10,10,10,10);
-                tv.setText(message);
-                toast.setView(tv);
-                toast.setDuration(Toast.LENGTH_LONG);
-                toast.show();
+                SimpleDateFormat currentDate = new SimpleDateFormat("MM dd yyyy");
+                dateVente = currentDate.format(calendar.getTime());
 
-                //Toast.makeText(VendreProduitActivity.this, "Erreur " + message, Toast.LENGTH_SHORT).show();
-                loadingBar.dismiss();
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-               // Toast.makeText(VendreProduitActivity.this, "Image enrigistré avec succes", Toast.LENGTH_SHORT).show();
+                SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
+                timeAjout = currentTime.format(calendar.getTime());
 
-                Task<Uri> uriTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                    @Override
-                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                        if (!task.isSuccessful()) {
-                            throw task.getException();
-                        }
+                produitRandomKey = dateVente + timeAjout;
+                if (desc.equals("") || adr.equals("") || prix.equals("") || numero.equals("") || quantite.equals("")){
+                    venteDesc.setError("requis");
+                    venteAdresse.setError("requis");
+                    vendrePrix.setError("requis");
+                    venteNumero.setError("requis");
+                    vendreQuantite.setError("requis");
 
-                        dowloadImageUri = filePath.getDownloadUrl().toString();
-                        return filePath.getDownloadUrl();
-                    }
-                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task) {
-                        if (task.isSuccessful()) {
-                            dowloadImageUri = task.getResult().toString();
-                            //Toast.makeText(VendreProduitActivity.this, "getting url success", Toast.LENGTH_SHORT).show();
-
-                            saveProduitToDatabase();
-                            clear();
-                        }
-                    }
-                });
-
+                }else if(imageUri == null){
+                    Toast.makeText(VendreProduitActivity.this, "Veillez mettre l'image du produit", Toast.LENGTH_SHORT).show();
+                }
+                else if (expiration.equals("")){
+                    Toast.makeText(VendreProduitActivity.this, "Veillez préciser la date d'expiration", Toast.LENGTH_SHORT).show();
+                }
+                else if(typen.equals("vide")){
+                    Toast.makeText(VendreProduitActivity.this, "Veillez préciser le type du produit", Toast.LENGTH_LONG).show();
+                }
+                else {
+                        clear();
+                        VendreProduit vendreProduit = new VendreProduit(typeChoist,desc,adr,prix,quantite,numero,expiration,dateVente,produitRandomKey);
+                        new Myuploader(VendreProduitActivity.this).upload(vendreProduit);
+                }
             }
         });
-    }
 
-    private void saveProduitToDatabase() {
-        HashMap<String,Object> produitHashmap = new HashMap<>();
-        produitHashmap.put("produitVenduId",produitRandomKey);
-        produitHashmap.put("date",saveCurrentDate);
-        produitHashmap.put("time",saveCurrentTime);
-        produitHashmap.put("quantiteVendu", quantite);
-        produitHashmap.put("prixVente",prix);
-        produitHashmap.put("dateExpiration",expiration);
-        produitHashmap.put("imageVented",dowloadImageUri);
-
-        produitRef.child(produitRandomKey).updateChildren(produitHashmap)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()){
-                            loadingBar.dismiss();
-
-                            Toast toast = new Toast(getApplicationContext());
-                            toast.setGravity(Gravity.CENTER,0,0);
-                            TextView tv = new TextView(VendreProduitActivity.this);
-                            tv.setBackgroundColor(Color.WHITE);
-                            tv.setTextColor(Color.BLUE);
-                            tv.setTextSize(15);
-
-                            Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
-                            tv.setTypeface(t);
-                            tv.setPadding(10,10,10,10);
-                            tv.setText("Produit publié avec succes");
-                            toast.setView(tv);
-                            toast.setDuration(Toast.LENGTH_LONG);
-                            toast.show();
-                            //Toast.makeText(VendreProduitActivity.this, "Produit ajouter avec success", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            loadingBar.dismiss();
-
-                            Toast toast = new Toast(getApplicationContext());
-                            toast.setGravity(Gravity.CENTER,0,0);
-                            TextView tv = new TextView(VendreProduitActivity.this);
-                            tv.setBackgroundColor(Color.WHITE);
-                            tv.setTextColor(Color.RED);
-                            tv.setTextSize(15);
-
-                            Typeface t = Typeface.create("serif",Typeface.BOLD_ITALIC);
-                            tv.setTypeface(t);
-                            tv.setPadding(10,10,10,10);
-                            tv.setText("Une erreur est survenue veillez recomencer");
-                            toast.setView(tv);
-                            toast.setDuration(Toast.LENGTH_LONG);
-                            toast.show();
-
-                            //Toast.makeText(VendreProduitActivity.this, "Erreur de l'ajout du produit", Toast.LENGTH_SHORT).show();
-
-                        }
-                    }
-                });
     }
 
     private void clear() {
         vendreQuantite.setText("");
         vendreExpiretion.setText("");
         vendrePrix.setText("");
+        venteNumero.setText("");
+        venteAdresse.setText("");
+        venteDesc.setText("");
+        typeChoist = "Précisez le type du produit";
         vendreImage.setImageResource(R.mipmap.cam);
     }
 }

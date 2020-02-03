@@ -15,8 +15,6 @@ public class HomeVenduVolontaireActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_vendu_volontaire);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarHomeVolontaire);
-        toolbar.setTitle("Espace Volontaire");
 
         cardViewCosmetique = findViewById(R.id.cardViewVenteCosmetique);
         cardViewCereale = findViewById(R.id.cardViewVenteFruit);

@@ -17,7 +17,43 @@
         android:cropToPadding="false"
         android:scaleType="center"
         android:src="@mipmap/cam" />
-     <android.support.design.widget.TextInputLayout
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <Spinner
+            android:id="@+id/typVendu"
+            style="@style/Material.Widget.Spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginStart="0dp"
+            android:textColor="@color/colorPurple"
+            app:rd_style="@style/Material.Drawable.Ripple.Wave"
+            android:layout_marginLeft="0dp">
+
+        </Spinner>
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/vendreDes"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/typVendu"
+            android:inputType="textMultiLine"
+            android:hint="libelle du produit"
+            android:layout_marginRight="45dp"
+            android:layout_marginLeft="45dp"
+            android:singleLine="true"
+            android:imeOptions="actionNext"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+
+    <android.support.design.widget.TextInputLayout
          android:layout_width="fill_parent"
          android:layout_height="wrap_content">
          <EditText
@@ -25,8 +61,8 @@
              android:layout_width="fill_parent"
              android:layout_height="wrap_content"
              android:layout_below="@id/vendreImage"
-             android:inputType="textMultiLine"
-             android:hint="Quantite"
+             android:inputType="number"
+             android:hint="Quantite(kg/piéces)"
              android:layout_marginRight="45dp"
              android:layout_marginLeft="45dp"
              android:singleLine="true"
@@ -42,9 +78,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/vendreQuantite"
-            android:inputType="textMultiLine"
-
-            android:hint="Prix du produit"
+            android:inputType="number"
+            android:hint="Prix(fcfa)"
             android:layout_marginRight="45dp"
             android:layout_marginLeft="45dp"
             android:singleLine="true"
@@ -68,6 +103,38 @@
            android:padding="20dp"
            />
    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/vendreAdresse"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/vendreImage"
+            android:inputType="textMultiLine"
+            android:hint="Adresse"
+            android:layout_marginRight="45dp"
+            android:layout_marginLeft="45dp"
+            android:singleLine="true"
+            android:imeOptions="actionNext"
+            />
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/vendreNumero"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/vendreImage"
+            android:inputType="number"
+            android:hint="Numero de téléphone"
+            android:layout_marginRight="45dp"
+            android:layout_marginLeft="45dp"
+            android:singleLine="true"
+            android:imeOptions="actionNext"
+            />
+    </android.support.design.widget.TextInputLayout>
 
 
     <Button
